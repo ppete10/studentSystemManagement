@@ -115,7 +115,7 @@ public class TextBasedUI {
     private static void listAllEnrollments(StudentService studentService) {
         Collection<Enrollment> enrollments = studentService.getAllEnrollment();
         System.out.println("\nAll Enrollments:");
-        for (Enrollment enrollment : studentService.getAllEnrollment()) {
+        for (Enrollment enrollment : enrollments) {
             System.out.println(enrollment);
         }
     }
