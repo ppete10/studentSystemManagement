@@ -22,22 +22,31 @@ public class MemEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Enrollment updateEnrollment(Enrollment studentEnrollId) {
-        return null;
+    public Enrollment updateEnrollment(Enrollment e, Course... course) {
+        for(Course c : course){
+            e.addCourse(c);
+        }
+        repo.put(e.getStudentEnrollId(), e);
+        return e;
     }
 
     @Override
-    public Enrollment deleteEnrollment(Enrollment e) {
-        return null;
+    public Enrollment deleteEnrollment(Enrollment studentEnrollId) {
+        try {
+            repo.remove(studentEnrollId.getStudentEnrollId(), studentEnrollId);
+        } catch (Exception e) {
+            return null;
+        }
+        return studentEnrollId;
     }
 
     @Override
     public Enrollment getEnrollmentByStudentId(String studentEnrollId) {
-        return null;
+        return repo.get(studentEnrollId);
     }
 
     @Override
     public Collection<Enrollment> getAllEnrollment() {
-        return null;
+        return repo.values();
     }
 }

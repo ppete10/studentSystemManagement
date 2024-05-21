@@ -51,18 +51,14 @@ public class StudentService {
     public Enrollment enrollment(String studentId, Course... course) {
         if (studentId == null || findStudentById(studentId) == null)
             return null;
-
         return enrolls.addEnrollment(studentId, course);
     }
 
-    public Enrollment changeEnrollment(String enrollId, Course... course) {
-        Enrollment e = findEnrollmentByStudentId(enrollId);
-        if (enrollId == null || e == null)
+    public Enrollment changeEnrollment(String studentEnrollId, Course... course) {
+        Enrollment e = findEnrollmentByStudentId(studentEnrollId);
+        if (studentEnrollId == null || e == null)
             return null;
-        for (Course c : course){
-            e.addCourse(c);
-        }
-        return enrolls.updateEnrollment(e);
+        return enrolls.updateEnrollment(e, course);
     }
 
 

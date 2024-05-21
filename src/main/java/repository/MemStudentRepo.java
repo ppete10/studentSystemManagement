@@ -9,12 +9,12 @@ import java.util.Map;
 
 
 public class MemStudentRepo implements StudentManagement {
-    private static long nextId = 66;
+    private static long nextId = 0;
     private Map<String, Student> repo = new HashMap<>();
 
     @Override
     public Student addStudent(String firstName, String lastName, int age, int year) {
-        String studentId = "S" + ++nextId;
+        String studentId = "S66" + ++nextId;
         Student s = new Student(studentId, firstName, lastName, age, year);
         if (repo.putIfAbsent(studentId, s) == null)
             return s;
