@@ -10,14 +10,14 @@ import java.util.Map;
 
 public class MemEnrollmentRepo implements EnrollManagement {
     private static long nextCode = 0;
-    private Map<String, Enrollment> repo = new HashMap<>();
+    private Map<String, Enrollment> enrollRepo = new HashMap<>();
     @Override
     public Enrollment addEnrollment(String enrollId, Course... course) {
         Enrollment e = new Enrollment(enrollId);
         for(Course c : course){
             e.addCourse(c);
         }
-        repo.put(e.getStudentEnrollId(), e);
+        enrollRepo.put(e.getStudentEnrollId(), e);
         return e;
     }
 
@@ -26,27 +26,27 @@ public class MemEnrollmentRepo implements EnrollManagement {
         for(Course c : course){
             e.addCourse(c);
         }
-        repo.put(e.getStudentEnrollId(), e);
+        enrollRepo.put(e.getStudentEnrollId(), e);
         return e;
     }
 
     @Override
-    public Enrollment deleteEnrollment(Enrollment studentEnrollId) {
+    public Enrollment deleteEnrollment(Enrollment enrollId) {
         try {
-            repo.remove(studentEnrollId.getStudentEnrollId(), studentEnrollId);
+            enrollRepo.remove(enrollId.getStudentEnrollId(), enrollId);
         } catch (Exception e) {
             return null;
         }
-        return studentEnrollId;
+        return enrollId;
     }
 
     @Override
     public Enrollment getEnrollmentByStudentId(String studentEnrollId) {
-        return repo.get(studentEnrollId);
+        return enrollRepo.get(studentEnrollId);
     }
 
     @Override
     public Collection<Enrollment> getAllEnrollment() {
-        return repo.values();
+        return enrollRepo.values();
     }
 }

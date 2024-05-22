@@ -7,7 +7,7 @@ public class Student {
     private int age;
     private int year;
 
-    public Student(String studentId, String firstName, String lastName, int age, int year) {
+    public Student(String studentId, String firstName, String lastName, int age, int year ) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,6 +53,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return String.format("Account(%s,%s,%s,%d,%d)", studentId, firstName, lastName, age, year);
+        return String.format("Student(%s,%s,%s,%d,%d)", studentId, firstName, lastName, age, year);
     }
 }

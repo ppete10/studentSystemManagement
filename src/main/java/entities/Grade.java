@@ -1,20 +1,31 @@
+/*
 package entities;
 
 public class Grade {
-    private String gradeEnrollId;
+    private String studentId;
+    private String courseCode;
     private double grade;
 
-    public Grade(String gradeEnrollId, double grade) {
-        this.gradeEnrollId = gradeEnrollId;
+    public Grade(String studentId, String courseCode, double grade) {
+        this.studentId = studentId;
+        this.courseCode = courseCode;
         this.grade = grade;
     }
 
-    public String getGradeEnrollId() {
-        return gradeEnrollId;
+    public String getStudentId() {
+        return studentId;
     }
 
-    public void setGradeEnrollId(String gradeEnrollId) {
-        this.gradeEnrollId = gradeEnrollId;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     public double getGrade() {
@@ -27,6 +38,7 @@ public class Grade {
 
     @Override
     public String toString() {
-        return String.format("Grade(%s is %.2f)", gradeEnrollId, grade);
+        return String.format("Grade(%s,%s,%d)", studentId, courseCode, grade);
     }
 }
+*/

@@ -3,85 +3,115 @@ package service;
 
 import entities.Course;
 import entities.Enrollment;
-import entities.Grade;
 import entities.Student;
 
 import java.util.Collection;
 
 public class StudentService {
-    private StudentManagement students;
-    private EnrollManagement enrolls;
-    private GradeCalculation gradeCal;
+    private StudentManagement studentRepo;
+    private EnrollManagement enrollRepo;
+    private final CourseMangement courseRepo;
 
-    public StudentService(StudentManagement student, EnrollManagement enroll) {
-        this.students = student;
-        this.enrolls = enroll;
+    public StudentService(StudentManagement student, EnrollManagement enroll, CourseMangement course) {
+        this.studentRepo = student;
+        this.enrollRepo = enroll;
+        this.courseRepo = course;
     }
 
+    // managing student
     public Student registerStudent(String firstName, String lastName, int age, int year) {
         if (firstName == null || lastName == null || age <= 0 || year <= 0)
             return null;
-        return students.addStudent(firstName, lastName, age, year);
+        return studentRepo.addStudent(firstName, lastName, age, year);
     }
 
     public Student reStudent(String studentId, String firstName, String lastName, int age, int year) {
-        Student s = students.findStudentById(studentId);
+        Student s = studentRepo.findStudentById(studentId);
         if (firstName == null || lastName == null || age <= 0 || year <= 0 || s == null)
             return null;
-        return students.updateStudent(s);
+        return studentRepo.updateStudent(s);
     }
 
     public Student deleteStudent(String studentId) {
-        Student s = students.findStudentById(studentId);
+        Student s = studentRepo.findStudentById(studentId);
         if (studentId == null || s == null)
             return null;
-        return students.deleteStudent(s);
+        return studentRepo.deleteStudent(s);
     }
 
     public Student findStudentById(String studentId) {
         if (studentId == null)
             return null;
-        return students.findStudentById(studentId);
+        return studentRepo.findStudentById(studentId);
     }
 
     public Collection<Student> getAllStudent() {
-        return students.getAllStudent();
+        return studentRepo.getAllStudent();
     }
 
-    public Enrollment enrollment(String studentId, Course... course) {
+
+    // managing enrollment
+    public Enrollment enrollStudentInCourse(String studentId, Course... course) {
         if (studentId == null || findStudentById(studentId) == null)
             return null;
-        return enrolls.addEnrollment(studentId, course);
+        return enrollRepo.addEnrollment(studentId, course);
     }
 
     public Enrollment changeEnrollment(String studentEnrollId, Course... course) {
         Enrollment e = findEnrollmentByStudentId(studentEnrollId);
         if (studentEnrollId == null || e == null)
             return null;
-        return enrolls.updateEnrollment(e, course);
+        return enrollRepo.updateEnrollment(e, course);
     }
 
-
-    public Enrollment findEnrollmentByStudentId(String studentEnrollId) {
-        return enrolls.getEnrollmentByStudentId(studentEnrollId);
-    }
-
-    public Enrollment deleteEnrollment(String enrollId) {
-        Enrollment e = enrolls.getEnrollmentByStudentId(enrollId);
+    public Enrollment deleteEnrollment (String enrollId){
+        Enrollment e = enrollRepo.getEnrollmentByStudentId(enrollId);
         if (enrollId == null || e == null)
             return null;
-        return enrolls.deleteEnrollment(e);
+        return enrollRepo.deleteEnrollment(e);
+    }
+
+    public Enrollment findEnrollmentByStudentId(String studentEnrollId) {
+        Enrollment e = findEnrollmentByStudentId(studentEnrollId);
+        if (studentEnrollId == null || e == null)
+            return null;
+        return enrollRepo.getEnrollmentByStudentId(studentEnrollId);
     }
 
     public Collection<Enrollment> getAllEnrollment() {
-        return enrolls.getAllEnrollment();
+        return enrollRepo.getAllEnrollment();
     }
 
-    public double calculateGPA(Collection<Grade> grades, Collection<Enrollment> enrollments) {
-        return gradeCal.calculateGPA(grades, enrollments);
+    //managing course
+    public Course addCourse(String courseCode, String courseName, int credits) {
+        if (courseCode == null || courseName == null || credits <= 0)
+            return null;
+        return courseRepo.addCourse(courseCode, courseName, credits);
     }
 
-    public void setGradeCalculation(GradeCalculation gradeCal) {
-        this.gradeCal = gradeCal;
+    public Course updateCourse(String courseCode, String courseName, int credits) {
+        Course c = getCourseByCode(courseCode);
+        if (courseCode == null || c == null || courseCode == null || courseName == null || credits <= 0)
+            return null;
+        Course c2 = new Course(courseCode, courseName, credits);
+        return courseRepo.updateCourse(courseCode, c2);
+    }
+    public Course deleteCourse(String courseCode){
+        Course c = courseRepo.getCourseByCode(courseCode);
+        if (courseCode == null || c == null)
+            return null;
+        return courseRepo.deleteCourse(c);
+    }
+
+
+    public Course getCourseByCode(String courseCode){
+        Course c = getCourseByCode(courseCode);
+        if (courseCode == null || c == null)
+            return null;
+        return courseRepo.getCourseByCode(courseCode);
+    }
+
+    public Collection<Course> getAllCourses() {
+        return courseRepo.getAllCourses();
     }
 }

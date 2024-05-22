@@ -1,3 +1,4 @@
+/*
 package repository;
 
 import entities.Course;
@@ -5,34 +6,25 @@ import entities.Enrollment;
 import entities.Grade;
 import service.GradeCalculation;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class MemGradeCalculationRepo implements GradeCalculation {
+    private List<Grade> grades = new ArrayList<>();
 
-    @Override
-    public double calculateGPA(Collection<Grade> grades, Collection<Enrollment> enrollments) {
-        double totalPoints = 0;
-        int totalCredits = 0;
-
-        for (Grade grade : grades) {
-            Enrollment enrollment = findEnrollmentById(enrollments, grade.getGradeEnrollId());
-            if (enrollment != null) {
-                for (Course course : enrollment.getCourse()) {
-                    totalCredits += course.getCredits();
-                    totalPoints += grade.getGrade() * course.getCredits();
-                }
-            }
-        }
-
-        return totalCredits == 0 ? 0 : totalPoints / totalCredits;
+    public double addGrade(Grade grade) {
+        grades.add(grade);
+        return ;
     }
-
-    private Enrollment findEnrollmentById(Collection<Enrollment> enrollments, String enrollId) {
-        for (Enrollment enrollment : enrollments) {
-            if (enrollment.getStudentEnrollId().equals(enrollId)) {
-                return enrollment;
+    public List<Grade> getGradesByStudentId(String studentId) {
+        List<Grade> result = new ArrayList<>();
+        for (Grade g : grades) {
+            if (g.getStudentId().equals(studentId)) {
+                result.add(g);
             }
         }
-        return null;
+        return result;
     }
 }
+*/

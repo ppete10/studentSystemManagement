@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface EnrollManagement {
     Enrollment addEnrollment(String enrollId, Course... course);
     Enrollment updateEnrollment(Enrollment studentEnrollId, Course[] course);
-    Enrollment deleteEnrollment(Enrollment e);
+    public Enrollment deleteEnrollment(Enrollment enrollId);
     Enrollment getEnrollmentByStudentId(String studentEnrollId);
     Collection<Enrollment> getAllEnrollment();
 }
