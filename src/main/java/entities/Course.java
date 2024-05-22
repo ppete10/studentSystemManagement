@@ -22,4 +22,9 @@ public class Course {
     public int getCredits() {
         return credits;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Course: %s, %s, %d", courseCode, courseName, credits);
+    }
 }

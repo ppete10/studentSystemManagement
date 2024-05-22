@@ -29,7 +29,8 @@ public class StudentService {
         Student s = studentRepo.findStudentById(studentId);
         if (firstName == null || lastName == null || age <= 0 || year <= 0 || s == null)
             return null;
-        return studentRepo.updateStudent(s);
+        Student s2 = new Student(s.getStudentId(),firstName, lastName, age, year);
+        return studentRepo.updateStudent(studentId, s2);
     }
 
     public Student deleteStudent(String studentId) {

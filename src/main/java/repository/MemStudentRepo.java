@@ -22,13 +22,13 @@ public class MemStudentRepo implements StudentManagement {
     }
 
     @Override
-    public Student updateStudent(Student student) {
+    public Student updateStudent(String studentId, Student s) {
         try {
-            repo.put(student.getStudentId(), student);
+            repo.put(s.getStudentId(), s);
         } catch (Exception e) {
             return null;
         }
-        return student;
+        return s;
     }
 
     @Override
