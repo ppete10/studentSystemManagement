@@ -73,7 +73,7 @@ public class StudentService {
     }
 
     public Enrollment findEnrollmentByStudentId(String studentEnrollId) {
-        Enrollment e = findEnrollmentByStudentId(studentEnrollId);
+        Enrollment e = enrollRepo.getEnrollmentByStudentId(studentEnrollId);
         if (studentEnrollId == null || e == null)
             return null;
         return enrollRepo.getEnrollmentByStudentId(studentEnrollId);
