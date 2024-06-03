@@ -6,6 +6,9 @@ import entities.Student;
 import repository.file.FileCourseRepo;
 import repository.file.FileEnrollmentRepo;
 import repository.file.FileStudentRepo;
+import repository.jdbc.JdbcCourseRepo;
+import repository.jdbc.JdbcEnrollmentRepo;
+import repository.jdbc.JdbcStudentRepo;
 import repository.memory.MemCourseRepo;
 import repository.memory.MemEnrollmentRepo;
 import repository.memory.MemStudentRepo;
@@ -20,17 +23,14 @@ public class StudentUI {
     private static StudentService studentService;
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-
-    }
+    //Select storageType
     public StudentUI(int storageType) {
-        /* if fromFile is true , load/save customer info into file */
         switch (storageType) {
             case 2:
                 studentService = new StudentService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
                 break;
             case 3:
-//                studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
+                studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
                 break;
             case 1:
             default:
