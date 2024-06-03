@@ -1,6 +1,8 @@
 package entities;
 
-public class Course {
+import java.io.Serializable;
+
+public class Course implements Serializable {
     private final String courseCode;
     private final String courseName;
     private final int credits;

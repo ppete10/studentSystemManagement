@@ -3,6 +3,9 @@ package ui;
 import entities.Course;
 import entities.Enrollment;
 import entities.Student;
+import repository.file.FileCourseRepo;
+import repository.file.FileEnrollmentRepo;
+import repository.file.FileStudentRepo;
 import repository.memory.MemCourseRepo;
 import repository.memory.MemEnrollmentRepo;
 import repository.memory.MemStudentRepo;
@@ -13,16 +16,30 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class StudentUI {
     private static StudentService studentService;
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        studentService = new StudentService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
-        run();
+
+    }
+    public StudentUI(int storageType) {
+        /* if fromFile is true , load/save customer info into file */
+        switch (storageType) {
+            case 2:
+                studentService = new StudentService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
+                break;
+            case 3:
+//                studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
+                break;
+            case 1:
+            default:
+                studentService = new StudentService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
+                break;
+        }
     }
 
-    private static void run() {
+    public static void run() {
         System.out.println("Welcome to Student System Management");
         while (true) {
             System.out.println("Login for Student[1] or Teacher[2]? (Enter '0' to quit)");
@@ -44,16 +61,14 @@ public class Main {
     private static void handleStudentActions() {
         System.out.print("=== Registering a student. ===\n");
         System.out.print("Enter first name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Enter last name: ");
-        String lastName = scanner.nextLine();
+        String name = scanner.nextLine();
         System.out.print("Enter age: ");
         int age = scanner.nextInt();
         System.out.print("Enter year: ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
-        Student student = studentService.registerStudent(firstName, lastName, age, year);
+        Student student = studentService.registerStudent(name, age, year);
         if (student != null) {
             System.out.println("Student registered successfully:");
             System.out.println(student);
@@ -85,16 +100,14 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("Update Your Info.");
-                    System.out.print("Enter first name: ");
-                    firstName = scanner.nextLine();
-                    System.out.print("Enter last name: ");
-                    lastName = scanner.nextLine();
+                    System.out.print("Enter Name: ");
+                    name = scanner.nextLine();
                     System.out.print("Enter age: ");
                     age = scanner.nextInt();
                     System.out.print("Enter year: ");
                     year = scanner.nextInt();
                     scanner.nextLine();
-                    student = studentService.reStudent(studentId, firstName, lastName, age, year);
+                    student = studentService.reStudent(studentId, name, age, year);
                     System.out.println("Updated: " + student);
                     break;
                 case 3:
@@ -267,17 +280,15 @@ public class Main {
     }
 
     private static void registerStudent() {
-        System.out.print("Enter first name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Enter last name: ");
-        String lastName = scanner.nextLine();
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine();
         System.out.print("Enter age: ");
         int age = scanner.nextInt();
         System.out.print("Enter year: ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
-        Student student = studentService.registerStudent(firstName, lastName, age, year);
+        Student student = studentService.registerStudent(name, age, year);
         if (student != null) {
             System.out.println("Student registered successfully:");
             System.out.println(student);
@@ -289,17 +300,15 @@ public class Main {
     private static void updateStudent() {
         System.out.print("Enter student ID: ");
         String studentId = scanner.nextLine();
-        System.out.print("Enter new first name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Enter new last name: ");
-        String lastName = scanner.nextLine();
+        System.out.print("Enter new Name: ");;
+        String name = scanner.nextLine();
         System.out.print("Enter new age: ");
         int age = scanner.nextInt();
         System.out.print("Enter new year: ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
-        Student student = studentService.reStudent(studentId, firstName, lastName, age, year);
+        Student student = studentService.reStudent(studentId, name, age, year);
         if (student != null) {
             System.out.println("Student updated successfully:");
             System.out.println(student);

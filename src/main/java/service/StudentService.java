@@ -22,17 +22,17 @@ public class StudentService {
     }
 
     // managing student
-    public Student registerStudent(String firstName, String lastName, int age, int year) {
-        if (firstName == null || lastName == null || age <= 0 || year <= 0)
+    public Student registerStudent(String name, int age, int year) {
+        if (name == null || age <= 0 || year <= 0)
             return null;
-        return studentRepo.addStudent(firstName, lastName, age, year);
+        return studentRepo.addStudent(name, age, year);
     }
 
-    public Student reStudent(String studentId, String firstName, String lastName, int age, int year) {
+    public Student reStudent(String studentId, String name, int age, int year) {
         Student s = studentRepo.findStudentById(studentId);
-        if (firstName == null || lastName == null || age <= 0 || year <= 0 || s == null)
+        if (name == null || age <= 0 || year <= 0 || s == null)
             return null;
-        Student s2 = new Student(s.getStudentId(),firstName, lastName, age, year);
+        Student s2 = new Student(s.getStudentId(),name, age, year);
         return studentRepo.updateStudent(studentId, s2);
     }
 

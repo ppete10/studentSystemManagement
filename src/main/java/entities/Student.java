@@ -1,16 +1,16 @@
 package entities;
 
-public class Student {
+import java.io.Serializable;
+
+public class Student implements Serializable {
     private final String studentId;
-    private String firstName;
-    private String lastName;
+    private String name;
     private int age;
     private int year;
 
-    public Student(String studentId, String firstName, String lastName, int age, int year ) {
+    public Student(String studentId, String name, int age, int year ) {
         this.studentId = studentId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.age = age;
         this.year = year;
     }
@@ -19,20 +19,12 @@ public class Student {
         return studentId;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getAge() {
@@ -53,6 +45,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return String.format("Student(%s,%s,%s,%d,%d)", studentId, firstName, lastName, age, year);
+        return String.format("Student(%s,%s,%s,%d,%d)", studentId, name, age, year);
     }
 }

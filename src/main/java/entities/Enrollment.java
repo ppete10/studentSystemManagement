@@ -1,9 +1,10 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Enrollment {
+public class Enrollment implements Serializable {
     private final String studentEnrollId;
     private Set<Course> course;
 
