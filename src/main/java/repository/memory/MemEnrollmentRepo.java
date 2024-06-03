@@ -1,8 +1,8 @@
-package repository;
+package repository.memory;
 
 import entities.Course;
 import entities.Enrollment;
-import service.EnrollManagement;
+import repository.EnrollManagement;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -4,6 +4,9 @@ package service;
 import entities.Course;
 import entities.Enrollment;
 import entities.Student;
+import repository.CourseMangement;
+import repository.EnrollManagement;
+import repository.StudentManagement;
 
 import java.util.Collection;
 

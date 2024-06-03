@@ -1,4 +1,4 @@
-package service;
+package repository;
 
 import entities.Enrollment;
 import entities.Student;

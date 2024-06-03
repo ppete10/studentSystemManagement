@@ -1,7 +1,7 @@
-package repository;
+package repository.memory;
 
 import entities.Course;
-import service.CourseMangement;
+import repository.CourseMangement;
 
 import java.util.Collection;
 import java.util.HashMap;

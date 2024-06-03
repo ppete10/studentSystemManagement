@@ -3,9 +3,9 @@ package int103;
 import entities.Course;
 import entities.Enrollment;
 import entities.Student;
-import repository.MemCourseRepo;
-import repository.MemEnrollmentRepo;
-import repository.MemStudentRepo;
+import repository.memory.MemCourseRepo;
+import repository.memory.MemEnrollmentRepo;
+import repository.memory.MemStudentRepo;
 import service.StudentService;
 
 import java.util.ArrayList;

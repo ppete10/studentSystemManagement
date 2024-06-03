@@ -26,7 +26,7 @@ public class Enrollment {
 
     @Override
     public String toString() {
-        return String.format("Enrollment(%s%s)", studentEnrollId, course);
+        return String.format("(ID:%s %s)", studentEnrollId, course);
     }
 
 }
