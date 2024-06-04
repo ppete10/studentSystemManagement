@@ -6,6 +6,7 @@ import repository.CourseMangement;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class MemCourseRepo implements CourseMangement {
     private Map<String, Course> courseRepo = new HashMap<>();
@@ -42,7 +43,7 @@ public class MemCourseRepo implements CourseMangement {
     }
 
     @Override
-    public Collection<Course> getAllCourses() {
-        return courseRepo.values();
+    public Stream<Course> getAllCourses() {
+        return courseRepo.values().stream();
     }
 }

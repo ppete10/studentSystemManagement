@@ -1,33 +1,84 @@
 package repository.file;
 
 import entities.Course;
+import entities.Student;
 import repository.CourseMangement;
 
+import java.io.*;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class FileCourseRepo implements CourseMangement {
+    private String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
+    private String filename = PATH + "course.dat";
+    private Map<String, Course> courseRepo;
+
+    public FileCourseRepo() {
+        File file = new File(filename);
+        if (file.exists()) {
+            try (FileInputStream fi = new FileInputStream(file);
+                 BufferedInputStream bi = new BufferedInputStream(fi);
+                 ObjectInputStream oi = new ObjectInputStream(bi)) {
+
+                courseRepo = (TreeMap<String, Course>) oi.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            courseRepo = new TreeMap<>();
+        }
+    }
+
+    private void writeToFile() {
+        try (FileOutputStream fos = new FileOutputStream(filename);
+             BufferedOutputStream bos = new BufferedOutputStream(fos);
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+
+            oos.writeObject(courseRepo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Course addCourse(String courseId, String courseName, int credits) {
-        return null;
+        Course c = new Course(courseId, courseName, credits);
+        courseRepo.put(c.getCourseCode(), c);
+        writeToFile();
+        return c;
     }
 
     @Override
     public Course updateCourse(String courseCode, Course c) {
-        return null;
+        try {
+            courseRepo.replace(courseCode, c);
+        } catch (Exception e) {
+            return null;
+        }
+        writeToFile();
+        return c;
     }
 
     @Override
     public Course deleteCourse(Course course) {
-        return null;
+        try {
+            courseRepo.remove(course.getCourseCode(), course);
+        } catch (Exception e) {
+            return null;
+        }
+        writeToFile();
+        return course;
     }
 
     @Override
     public Course getCourseByCode(String courseCode) {
-        return null;
+        return courseRepo.get(courseCode);
     }
 
     @Override
-    public Collection<Course> getAllCourses() {
-        return null;
+    public Stream<Course> getAllCourses() {
+        return courseRepo.values().stream();
     }
 }

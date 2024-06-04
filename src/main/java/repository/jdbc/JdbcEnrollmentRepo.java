@@ -5,6 +5,7 @@ import entities.Enrollment;
 import repository.EnrollManagement;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class JdbcEnrollmentRepo implements EnrollManagement {
     @Override
@@ -28,7 +29,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Collection<Enrollment> getAllEnrollment() {
+    public Stream<Enrollment> getAllEnrollment() {
         return null;
     }
 }

@@ -45,6 +45,6 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Student(%s,%s,%s,%d,%d)", studentId, name, age, year);
+        return String.format("Student(%s,%s,%d,%d)", studentId, name, age, year);
     }
 }

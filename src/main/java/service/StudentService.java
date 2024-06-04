@@ -9,6 +9,7 @@ import repository.EnrollManagement;
 import repository.StudentManagement;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class StudentService {
     private StudentManagement studentRepo;
@@ -49,7 +50,7 @@ public class StudentService {
         return studentRepo.findStudentById(studentId);
     }
 
-    public Collection<Student> getAllStudent() {
+    public Stream<Student> getAllStudent() {
         return studentRepo.getAllStudent();
     }
 
@@ -82,7 +83,7 @@ public class StudentService {
         return enrollRepo.getEnrollmentByStudentId(studentEnrollId);
     }
 
-    public Collection<Enrollment> getAllEnrollment() {
+    public Stream<Enrollment> getAllEnrollment() {
         return enrollRepo.getAllEnrollment();
     }
 
@@ -115,7 +116,7 @@ public class StudentService {
         return courseRepo.getCourseByCode(courseCode);
     }
 
-    public Collection<Course> getAllCourses() {
+    public Stream<Course> getAllCourses() {
         return courseRepo.getAllCourses();
     }
 }

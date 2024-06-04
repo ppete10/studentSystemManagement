@@ -7,10 +7,11 @@ import repository.EnrollManagement;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class MemEnrollmentRepo implements EnrollManagement {
     private static long nextCode = 0;
-    private Map<String, Enrollment> enrollRepo = new HashMap<>();
+    private Map<String, Enrollment> enrollRepo;
     @Override
     public Enrollment addEnrollment(String enrollId, Course... course) {
         Enrollment e = new Enrollment(enrollId);
@@ -46,7 +47,7 @@ public class MemEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Collection<Enrollment> getAllEnrollment() {
-        return enrollRepo.values();
+    public Stream<Enrollment> getAllEnrollment() {
+        return enrollRepo.values().stream();
     }
 }

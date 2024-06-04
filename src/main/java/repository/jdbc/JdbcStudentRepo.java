@@ -4,6 +4,7 @@ import entities.Student;
 import repository.StudentManagement;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class JdbcStudentRepo implements StudentManagement {
     @Override
@@ -27,7 +28,7 @@ public class JdbcStudentRepo implements StudentManagement {
     }
 
     @Override
-    public Collection<Student> getAllStudent() {
+    public Stream<Student> getAllStudent() {
         return null;
     }
 }

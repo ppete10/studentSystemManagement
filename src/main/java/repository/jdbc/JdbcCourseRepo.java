@@ -4,6 +4,7 @@ import entities.Course;
 import repository.CourseMangement;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class JdbcCourseRepo implements CourseMangement {
     @Override
@@ -27,7 +28,7 @@ public class JdbcCourseRepo implements CourseMangement {
     }
 
     @Override
-    public Collection<Course> getAllCourses() {
+    public Stream<Course> getAllCourses() {
         return null;
     }
 }

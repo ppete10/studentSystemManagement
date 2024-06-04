@@ -18,21 +18,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class StudentUI {
     private static StudentService studentService;
     private static Scanner scanner = new Scanner(System.in);
 
     //Select storageType
-    public StudentUI(int storageType) {
-        switch (storageType) {
-            case 2:
+    public StudentUI(String storageType) {
+        switch (storageType.toLowerCase()) {
+            case "file":
                 studentService = new StudentService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
                 break;
-            case 3:
+            case "jdbc":
                 studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
                 break;
-            case 1:
+            case "memmory":
             default:
                 studentService = new StudentService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
                 break;
@@ -115,7 +116,13 @@ public class StudentUI {
                     break;
                 case 4:
                     System.out.println("Enroll in Courses.");
-                    List<Course> availableCourses = new ArrayList<>(studentService.getAllCourses());
+
+                    // Create a list to store available courses
+                    List<Course> availableCourses = new ArrayList<>();
+
+                    // Get courses using forEach to populate the list
+                    studentService.getAllCourses().forEach(availableCourses::add);
+
                     List<Course> selectedCourses = new ArrayList<>();
                     while (true) {
                         System.out.println("List All Courses:");
@@ -151,40 +158,40 @@ public class StudentUI {
                     Enrollment e = studentService.findEnrollmentByStudentId(studentId);
                     System.out.println("Your Enrollments: " + e);
                     break;
-                case 6:
-                    System.out.println("Update Enrollment.");
-                    availableCourses = new ArrayList<>(studentService.getAllCourses());
-                    selectedCourses = new ArrayList<>();
-                    while (true) {
-                        System.out.println("List All Courses:");
-                        for (int i = 0; i < availableCourses.size(); i++) {
-                            System.out.println((i + 1) + ". " + availableCourses.get(i));
-                        }
-                        System.out.println("Select option (0 to exit):");
-                        int courseOption = scanner.nextInt();
-                        scanner.nextLine();
-                        if (courseOption == 0) {
-                            break;
-                        } else if (courseOption > 0 && courseOption <= availableCourses.size()) {
-                            Course selectedCourse = availableCourses.get(courseOption - 1);
-                            if (!selectedCourses.contains(selectedCourse)) {
-                                selectedCourses.add(selectedCourse);
-                                availableCourses.remove(selectedCourse);
-                                System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
-                            } else {
-                                System.out.println("You have already selected this course.");
-                            }
-                        } else {
-                            System.out.println("Invalid option. Please try again.");
-                        }
-                    }
-                    if (!selectedCourses.isEmpty()) {
-                        Enrollment enrollment = studentService.changeEnrollment(studentId, selectedCourses.toArray(new Course[0]));
-                        System.out.println("Updated Enrollments: " + enrollment);
-                    } else {
-                        System.out.println("No courses selected.");
-                    }
-                    break;
+//                case 6:
+//                    System.out.println("Update Enrollment.");
+//                    availableCourses = new ArrayList<>(studentService.getAllCourses());
+//                    selectedCourses = new ArrayList<>();
+//                    while (true) {
+//                        System.out.println("List All Courses:");
+//                        for (int i = 0; i < availableCourses.size(); i++) {
+//                            System.out.println((i + 1) + ". " + availableCourses.get(i));
+//                        }
+//                        System.out.println("Select option (0 to exit):");
+//                        int courseOption = scanner.nextInt();
+//                        scanner.nextLine();
+//                        if (courseOption == 0) {
+//                            break;
+//                        } else if (courseOption > 0 && courseOption <= availableCourses.size()) {
+//                            Course selectedCourse = availableCourses.get(courseOption - 1);
+//                            if (!selectedCourses.contains(selectedCourse)) {
+//                                selectedCourses.add(selectedCourse);
+//                                availableCourses.remove(selectedCourse);
+//                                System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+//                            } else {
+//                                System.out.println("You have already selected this course.");
+//                            }
+//                        } else {
+//                            System.out.println("Invalid option. Please try again.");
+//                        }
+//                    }
+//                    if (!selectedCourses.isEmpty()) {
+//                        Enrollment enrollment = studentService.changeEnrollment(studentId, selectedCourses.toArray(new Course[0]));
+//                        System.out.println("Updated Enrollments: " + enrollment);
+//                    } else {
+//                        System.out.println("No courses selected.");
+//                    }
+//                    break;
                 case 7:
                     System.out.println("Logging out...");
                     return;
@@ -457,36 +464,33 @@ public class StudentUI {
     }
 
     private static void viewAllCourses() {
-        Collection<Course> courses = studentService.getAllCourses();
-        if (!courses.isEmpty()) {
+        Stream<Course> courses = studentService.getAllCourses();
+        if (courses.count() > 0) {
+            courses = studentService.getAllCourses();
             System.out.println("All courses:");
-            for (Course course : courses) {
-                System.out.println(course);
-            }
+            courses.forEach(System.out::println);
         } else {
             System.out.println("No courses available.");
         }
     }
 
     private static void viewAllStudents() {
-        Collection<Student> students = studentService.getAllStudent();
-        if (!students.isEmpty()) {
+        Stream<Student> studentStream = studentService.getAllStudent();
+        if (studentStream.count() > 0) {
+            studentStream = studentService.getAllStudent();
             System.out.println("All students:");
-            for (Student student : students) {
-                System.out.println(student);
-            }
+            studentStream.forEach(System.out::println);
         } else {
             System.out.println("No students available.");
         }
     }
 
     private static void viewAllEnrollments() {
-        Collection<Enrollment> enrollments = studentService.getAllEnrollment();
-        if (!enrollments.isEmpty()) {
+        Stream<Enrollment> enrollments = studentService.getAllEnrollment();
+        if (enrollments.count() > 0) {
+            enrollments = studentService.getAllEnrollment();
             System.out.println("All enrollments:");
-            for (Enrollment enrollment : enrollments) {
-                System.out.println(enrollment);
-            }
+            enrollments.forEach(System.out::println);
         } else {
             System.out.println("No enrollments available.");
         }

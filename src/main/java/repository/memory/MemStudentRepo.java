@@ -6,6 +6,7 @@ import repository.StudentManagement;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 public class MemStudentRepo implements StudentManagement {
@@ -47,7 +48,7 @@ public class MemStudentRepo implements StudentManagement {
     }
 
     @Override
-    public Collection<Student> getAllStudent() {
-        return repo.values();
+    public Stream<Student> getAllStudent() {
+        return repo.values().stream();
     }
 }
