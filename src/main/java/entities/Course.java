@@ -1,5 +1,7 @@
 package entities;
 
+import exception.InvalidCourseFormatException;
+
 import java.io.Serializable;
 
 public class Course implements Serializable {
@@ -8,6 +10,9 @@ public class Course implements Serializable {
     private final int credits;
 
     public Course(String courseCode, String courseName, int credits) {
+        if (courseCode == null || courseCode.isBlank() ||
+                courseName == null || courseName.isBlank() || credits <= 0)
+            throw new InvalidCourseFormatException();
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.credits = credits;

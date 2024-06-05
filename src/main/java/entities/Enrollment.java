@@ -1,5 +1,8 @@
 package entities;
 
+
+import exception.InvalidEnrollmentFormatException;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +12,9 @@ public class Enrollment implements Serializable {
     private Set<Course> course;
 
     public Enrollment(String enrollmentId) {
+        if (enrollmentId == null || enrollmentId.isBlank())
+            throw new InvalidEnrollmentFormatException();
+
         this.studentEnrollId = enrollmentId;
         this.course = new HashSet<>();
     }

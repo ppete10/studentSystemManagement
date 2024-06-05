@@ -3,6 +3,7 @@ package ui;
 import entities.Course;
 import entities.Enrollment;
 import entities.Student;
+import exception.InvalidStudentFormatException;
 import repository.file.FileCourseRepo;
 import repository.file.FileEnrollmentRepo;
 import repository.file.FileStudentRepo;
@@ -15,7 +16,6 @@ import repository.memory.MemStudentRepo;
 import service.StudentService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -23,61 +23,128 @@ import java.util.stream.Stream;
 public class StudentUI {
     private static StudentService studentService;
     private static Scanner scanner = new Scanner(System.in);
+    private static boolean continueRunning = true;
 
-    //Select storageType
-    public StudentUI(String storageType) {
-        switch (storageType.toLowerCase()) {
-            case "file":
-                studentService = new StudentService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
-                break;
-            case "jdbc":
-                studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
-                break;
-            case "memmory":
-            default:
-                studentService = new StudentService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
-                break;
-        }
-    }
 
-    public static void run() {
-        System.out.println("Welcome to Student System Management");
+    public static void start() {
+        System.out.println("     Welcome to Student System Management");
+        System.out.println("===============================================");
+        System.out.println("Please Login.");
+        String username = "admin";
+        String password = "int103";
+        String typePass;
+        String typeUser;
+        var cons = System.console();
+        var sc = new Scanner(System.in);
+
         while (true) {
-            System.out.println("Login for Student[1] or Teacher[2]? (Enter '0' to quit)");
-            Integer role = scanner.nextInt();
-            scanner.nextLine();
-
-            if (role == 0) {
-                break;
-            } else if (role == 1) {
-                handleStudentActions();
-            } else if (role == 2) {
-                handleTeacherActions();
+            if (cons != null) {
+                System.out.print("Username: ");
+                typeUser = sc.nextLine();
+                System.out.print("Password: ");
+                typePass = new String(cons.readPassword());
             } else {
-                System.out.println("Invalid option. Please select Student[1] or Teacher[2].");
+                System.out.println("[Public]");
+                System.out.print("Username: ");
+                typeUser = sc.nextLine();
+                System.out.println("Password: ");
+                typePass = sc.nextLine();
+            }
+
+            if (typeUser.equals(username) && typePass.equals(password)) {
+                run();
+
+                System.out.println("===============================================");
+                System.out.println("Thank you!! for using Student System Management");
+                System.out.println("Have a nice day!!");
+                break;
+            } else {
+                System.out.println("Invalid Username or Password, Try agian!!");
             }
         }
     }
 
-    private static void handleStudentActions() {
-        System.out.print("=== Registering a student. ===\n");
-        System.out.print("Enter first name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter age: ");
-        int age = scanner.nextInt();
-        System.out.print("Enter year: ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
+    //Select storageType
+    private static void storage() {
+        System.out.println("Please select storage type[File, jdbc, Memory]");
 
-        Student student = studentService.registerStudent(name, age, year);
-        if (student != null) {
-            System.out.println("Student registered successfully:");
-            System.out.println(student);
-        } else {
-            System.out.println("Failed to register student.");
-            return;
+        while (true) {
+            String typeStorage = scanner.nextLine();
+            switch (typeStorage.toLowerCase()) {
+                case "file":
+                    studentService = new StudentService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
+                    break;
+                case "jdbc":
+                    studentService = new StudentService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
+                    break;
+                case "memory":
+                    studentService = new StudentService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
+                    break;
+                default:
+                    System.out.println("Invalid option, Please select [File, jdbc, Memory]!");
+                    continue;
+            }
+            break;
         }
-        String studentId = student.getStudentId();
+    }
+
+    private static void run() {
+        while (continueRunning) {
+            storage();
+            selectRole();
+        }
+    }
+
+    private static void selectRole() {
+        while (true) {
+            System.out.println("Select Storage Type[3]");
+            System.out.println("Login for Student[1] or Teacher[2]? (Enter '0' to quit)");
+            try {
+                Integer role = scanner.nextInt();
+                scanner.nextLine();
+                if (role == 0) {
+                    continueRunning = false;
+                    break;
+                } else if (role == 1) {
+                    studentLogin();
+                } else if (role == 2) {
+                    teacherActions();
+                } else if (role == 3) {
+                    break;
+                } else {
+                    System.out.println("Invalid option. Please select Student[1] or Teacher[2].");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please select Student[1] or Teacher[2].");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    private static void studentLogin() {
+        System.out.print("=== Student login ===\n");
+        System.out.println("Login by Student ID (Enter '0' to back)");
+        Student student;
+
+        while (true) {
+            String studentId = scanner.nextLine();
+            if (studentId.equals("0")) {
+                break;
+            }
+
+            student = studentService.findStudentById(studentId);
+            if (student != null) {
+                System.out.println("Login success!!");
+                studentAction(student.getStudentId());
+                break;
+            } else {
+                System.out.println("Invalid Student ID, Please try agian. (Enter '0' to back)");
+            }
+
+        }
+    }
+
+    private static void studentAction(String studentId) {
 
         while (true) {
             String menu = """
@@ -87,8 +154,7 @@ public class StudentUI {
                     3. View All Courses
                     4. Enroll in Courses
                     5. View your Enrollments
-                    6. Update Enrollment
-                    7. Logout
+                    6. Logout
                     """;
             System.out.println(menu);
             int option = scanner.nextInt();
@@ -96,103 +162,21 @@ public class StudentUI {
 
             switch (option) {
                 case 1:
-                    student = studentService.findStudentById(studentId);
-                    System.out.println("Found: " + student);
+                    showYourInfo(studentId);
                     break;
                 case 2:
-                    System.out.println("Update Your Info.");
-                    System.out.print("Enter Name: ");
-                    name = scanner.nextLine();
-                    System.out.print("Enter age: ");
-                    age = scanner.nextInt();
-                    System.out.print("Enter year: ");
-                    year = scanner.nextInt();
-                    scanner.nextLine();
-                    student = studentService.reStudent(studentId, name, age, year);
-                    System.out.println("Updated: " + student);
+                    updateStudentById(studentId);
                     break;
                 case 3:
-                    System.out.println("All Courses: " + studentService.getAllCourses());
+                    viewAllCourses();
                     break;
                 case 4:
-                    System.out.println("Enroll in Courses.");
-
-                    // Create a list to store available courses
-                    List<Course> availableCourses = new ArrayList<>();
-
-                    // Get courses using forEach to populate the list
-                    studentService.getAllCourses().forEach(availableCourses::add);
-
-                    List<Course> selectedCourses = new ArrayList<>();
-                    while (true) {
-                        System.out.println("List All Courses:");
-                        for (int i = 0; i < availableCourses.size(); i++) {
-                            System.out.println((i + 1) + ". " + availableCourses.get(i));
-                        }
-                        System.out.println("Select option (0 to exit):");
-                        int courseOption = scanner.nextInt();
-                        scanner.nextLine();
-                        if (courseOption == 0) {
-                            break;
-                        } else if (courseOption > 0 && courseOption <= availableCourses.size()) {
-                            Course selectedCourse = availableCourses.get(courseOption - 1);
-                            if (!selectedCourses.contains(selectedCourse)) {
-                                selectedCourses.add(selectedCourse);
-                                availableCourses.remove(selectedCourse);
-                                System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
-                            } else {
-                                System.out.println("You have already selected this course.");
-                            }
-                        } else {
-                            System.out.println("Invalid option. Please try again.");
-                        }
-                    }
-                    if (!selectedCourses.isEmpty()) {
-                        Enrollment enrollment = studentService.enrollStudentInCourse(studentId, selectedCourses.toArray(new Course[0]));
-                        System.out.println("Enrolled in courses: " + enrollment);
-                    } else {
-                        System.out.println("No courses selected.");
-                    }
+                    enrollStudentInCourse(studentId);
                     break;
                 case 5:
-                    Enrollment e = studentService.findEnrollmentByStudentId(studentId);
-                    System.out.println("Your Enrollments: " + e);
+                    findEnrollmentByStudentId(studentId);
                     break;
-//                case 6:
-//                    System.out.println("Update Enrollment.");
-//                    availableCourses = new ArrayList<>(studentService.getAllCourses());
-//                    selectedCourses = new ArrayList<>();
-//                    while (true) {
-//                        System.out.println("List All Courses:");
-//                        for (int i = 0; i < availableCourses.size(); i++) {
-//                            System.out.println((i + 1) + ". " + availableCourses.get(i));
-//                        }
-//                        System.out.println("Select option (0 to exit):");
-//                        int courseOption = scanner.nextInt();
-//                        scanner.nextLine();
-//                        if (courseOption == 0) {
-//                            break;
-//                        } else if (courseOption > 0 && courseOption <= availableCourses.size()) {
-//                            Course selectedCourse = availableCourses.get(courseOption - 1);
-//                            if (!selectedCourses.contains(selectedCourse)) {
-//                                selectedCourses.add(selectedCourse);
-//                                availableCourses.remove(selectedCourse);
-//                                System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
-//                            } else {
-//                                System.out.println("You have already selected this course.");
-//                            }
-//                        } else {
-//                            System.out.println("Invalid option. Please try again.");
-//                        }
-//                    }
-//                    if (!selectedCourses.isEmpty()) {
-//                        Enrollment enrollment = studentService.changeEnrollment(studentId, selectedCourses.toArray(new Course[0]));
-//                        System.out.println("Updated Enrollments: " + enrollment);
-//                    } else {
-//                        System.out.println("No courses selected.");
-//                    }
-//                    break;
-                case 7:
+                case 6:
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -202,28 +186,43 @@ public class StudentUI {
         }
     }
 
-    private static void handleTeacherActions() {
+
+    private static void showYourInfo(String studentId) {
+        Student student = studentService.findStudentById(studentId);
+        System.out.println("Your Student ID: " + student.getStudentId());
+        System.out.println(student.getName());
+        System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
+    }
+
+
+
+    private static void teacherActions() {
         while (true) {
             String menu = """
                     \n===== Menu For Teacher =====
+                    Select menu [1-16].
+                    
                     Student Manage:
                     1. Register Student
                     2. Update Student
                     3. Delete Student
                     4. Find Student by ID
-                    Enroll Manage:
-                    5. Enroll Student in Course
-                    6. Change Enrollment
-                    7. Delete Enrollment
-                    8. View Enrollment
+                    5. View All Students
+                    ------------------------------
                     Course Manage:
-                    9. Add Course
-                    10. Update Course
-                    11. Delete Course
-                    12. View Course by Code
-                    13. View All Courses
-                    14. View All Students
+                    6. Add Course
+                    7. Update Course
+                    8. Delete Course
+                    9. View Course by Code
+                    10.View All Courses
+                    ------------------------------
+                    Enroll Manage:
+                    11. Enroll Student in Course
+                    12. Change Enrollment
+                    13. Delete Enrollment
+                    14. View Enrollment by ID
                     15. View All Enrollments
+                    ------------------------------
                     16. Logout
                     """;
             System.out.println(menu);
@@ -244,34 +243,34 @@ public class StudentUI {
                     findStudentById();
                     break;
                 case 5:
-                    enrollStudentInCourse();
+                    viewAllStudents();
                     break;
                 case 6:
-                    changeEnrollment();
-                    break;
-                case 7:
-                    deleteEnrollment();
-                    break;
-                case 8:
-                    viewEnrollment();
-                    break;
-                case 9:
                     addCourse();
                     break;
-                case 10:
-                    updateCourse();
+                case 7:
+                    updateStudent();
                     break;
-                case 11:
+                case 8:
                     deleteCourse();
                     break;
-                case 12:
+                case 9:
                     viewCourseByCode();
                     break;
-                case 13:
+                case 10:
                     viewAllCourses();
                     break;
+                case 11:
+                    enrollStudentInCourse();
+                    break;
+                case 12:
+                    changeEnrollment();
+                    break;
+                case 13:
+                    deleteEnrollment();
+                    break;
                 case 14:
-                    viewAllStudents();
+                    viewEnrollment();
                     break;
                 case 15:
                     viewAllEnrollments();
@@ -286,14 +285,68 @@ public class StudentUI {
         }
     }
 
+
+    // Manage Student UI
     private static void registerStudent() {
-        System.out.print("Enter Name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter age: ");
-        int age = scanner.nextInt();
-        System.out.print("Enter year: ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
+        String name = null;
+        int age = 0;
+        int year = 0;
+        boolean isValid = false;
+
+        while (!isValid) {
+            try {
+                System.out.print("Enter Name: ");
+                name = scanner.nextLine();
+                if (name.trim().isEmpty()) {
+                    throw new InvalidStudentFormatException("Name cannot be empty");
+                }
+                isValid = true;
+            } catch (InvalidStudentFormatException e) {
+                System.out.println("Invalid name. Try again!.");
+            }
+        }
+
+        isValid = false;
+        while (!isValid) {
+            try {
+                System.out.print("Enter age: ");
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty() || input.isBlank()) {
+                    throw new InvalidStudentFormatException("Age cannot be empty.");
+                }
+                age = Integer.parseInt(input);
+                if (age > 0) {
+                    isValid = true;
+                } else {
+                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Invalid age. Try again!.");
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        isValid = false;
+        while (!isValid) {
+            try {
+                System.out.print("Enter year: ");
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty() || input.isBlank()) {
+                    throw new InvalidStudentFormatException("Year cannot be empty.");
+                }
+                year = Integer.parseInt(input);
+                if (year > 0) {
+                    isValid = true;
+                } else {
+                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Invalid year. Try again!.");
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
         Student student = studentService.registerStudent(name, age, year);
         if (student != null) {
@@ -304,48 +357,146 @@ public class StudentUI {
         }
     }
 
-    private static void updateStudent() {
-        System.out.print("Enter student ID: ");
-        String studentId = scanner.nextLine();
-        System.out.print("Enter new Name: ");;
-        String name = scanner.nextLine();
-        System.out.print("Enter new age: ");
-        int age = scanner.nextInt();
-        System.out.print("Enter new year: ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
+    private static void updateStudent(){
+        viewAllStudents();
+        String studentId = checkStudentId().getStudentId();
 
-        Student student = studentService.reStudent(studentId, name, age, year);
-        if (student != null) {
-            System.out.println("Student updated successfully:");
-            System.out.println(student);
-        } else {
-            System.out.println("Failed to update student.");
+        if(studentId != null){
+            updateStudentById(studentId);
         }
     }
 
+    private static void updateStudentById(String studentId) {
+        String name = null;
+        int age = 0;
+        int year = 0;
+        boolean isValid = false;
+        Student studentOld = studentService.findStudentById(studentId);
+        System.out.println("Name: " + studentOld.getName());
+        System.out.println("Age: " + studentOld.getAge() + ", Year: " + studentOld.getYear());
+        while (!isValid) {
+            try {
+                System.out.print("Enter new Name: ");
+                name = scanner.nextLine();
+                if (name.trim().isEmpty()) {
+                    throw new InvalidStudentFormatException("Name cannot be empty");
+                }
+                isValid = true;
+            } catch (InvalidStudentFormatException e) {
+                System.out.println("Invalid name. Try again!.");
+            }
+        }
+
+        isValid = false;
+        while (!isValid) {
+            try {
+                System.out.print("Enter new age: ");
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty() || input.isBlank()) {
+                    throw new InvalidStudentFormatException("Age cannot be empty.");
+                }
+                age = Integer.parseInt(input);
+                if (age > 0) {
+                    isValid = true;
+                } else {
+                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Invalid age. Try again!.");
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        isValid = false;
+        while (!isValid) {
+            try {
+                System.out.print("Enter new Year: ");
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty() || input.isBlank()) {
+                    throw new InvalidStudentFormatException("Year cannot be empty.");
+                }
+                year = Integer.parseInt(input);
+                if (year > 0) {
+                    isValid = true;
+                } else {
+                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Invalid year. Try again!.");
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        Student student = studentService.reStudent(studentId, name, age, year);
+        System.out.println("----------------------");
+        System.out.println("Update Success  ");
+        System.out.println("Name: " + student.getName());
+        System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
+    }
+
+    private static Student checkStudentId(){
+        String studentId;
+        boolean isValid = false;
+        while (!isValid) {
+            try {
+                System.out.print("Enter student ID: ");
+                studentId = scanner.nextLine();
+                if (studentId.trim().isEmpty()) {
+                    throw new InvalidStudentFormatException("Student ID cannot be empty");
+                }
+                Student student = studentService.findStudentById(studentId);
+                if (student != null){
+                    isValid = true;
+                    return student;
+                } else {
+                    System.out.println("Not Found student ID. Try again!.");
+                    isValid = true;
+                }
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
+    }
+
     private static void deleteStudent() {
-        System.out.print("Enter student ID: ");
-        String studentId = scanner.nextLine();
-        Student student = studentService.deleteStudent(studentId);
-        if (student != null) {
-            System.out.println("Student deleted successfully.");
-        } else {
-            System.out.println("Failed to delete student.");
+        viewAllStudents();
+        String studentId = checkStudentId().getStudentId();
+        if(studentId != null){
+            Student student = studentService.deleteStudent(studentId);
+            if (student != null) {
+                System.out.println("Student deleted successfully.");
+            } else {
+                System.out.println("Failed to delete student.");
+            }
         }
     }
 
     private static void findStudentById() {
-        System.out.print("Enter student ID: ");
-        String studentId = scanner.nextLine();
+        String studentId = checkStudentId().getStudentId();
         Student student = studentService.findStudentById(studentId);
-        if (student != null) {
-            System.out.println("Student found:");
-            System.out.println(student);
+        if(student != null){
+            System.out.println("Student found: ");
+            System.out.println("Name: " + student.getName());
+            System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
         } else {
             System.out.println("Student not found.");
         }
     }
+
+    private static void viewAllStudents() {
+        Stream<Student> studentStream = studentService.getAllStudent();
+        if (studentStream.count() > 0) {
+            studentStream = studentService.getAllStudent();
+            System.out.println("All students:");
+            studentStream.forEach(System.out::println);
+        } else {
+            System.out.println("No students available.");
+        }
+    }
+    // Manage Enroll UI
 
     private static void enrollStudentInCourse() {
         System.out.print("Enter student ID: ");
@@ -364,21 +515,100 @@ public class StudentUI {
         System.out.println("Enrolled in courses: " + enrollment);
     }
 
+    private static void enrollStudentInCourse(String studentId) {
+        Enrollment checkEnroll = studentService.findEnrollmentByStudentId(studentId);
+
+        if (checkEnroll != null) {
+            System.out.println("You has enrolled already!");
+            System.out.println(checkEnroll);
+            return;
+        }
+
+        System.out.println("Enroll in Courses.");
+        List<Course> availableCourses = new ArrayList<>();
+        studentService.getAllCourses().forEach(availableCourses::add);
+
+        List<Course> selectedCourses = new ArrayList<>();
+
+        while (true) {
+            System.out.println("List All Courses:");
+            System.out.println("Type number to select option.");
+            for (int i = 0; i < availableCourses.size(); i++) {
+                System.out.println((i + 1) + ". " + availableCourses.get(i));
+            }
+            System.out.println("Select option (0 to exit):");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            if (option == 0) {
+                break;
+            } else if (option > 0 && option <= availableCourses.size()) {
+                Course selectedCourse = availableCourses.get(option - 1);
+
+                if (!selectedCourses.contains(selectedCourse)) {
+                    selectedCourses.add(selectedCourse);
+                    System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                } else {
+                    System.out.println("You have already selected this course.");
+                }
+            } else {
+                System.out.println("Invalid option. Please try again.");
+            }
+        }
+        if (!selectedCourses.isEmpty()) {
+            Enrollment enrollment = studentService.enrollStudentInCourse(studentId, selectedCourses.toArray(new Course[0]));
+            System.out.println("Enrolled in courses: " + enrollment);
+        } else {
+            System.out.println("No courses Enrolled.");
+        }
+    }
+
     private static void changeEnrollment() {
         System.out.print("Enter student ID: ");
         String studentId = scanner.nextLine();
-        System.out.print("Enter new course codes (comma separated): ");
-        String[] courseCodes = scanner.nextLine().split(",");
-        Course[] courses = new Course[courseCodes.length];
-        for (int i = 0; i < courseCodes.length; i++) {
-            courses[i] = studentService.getCourseByCode(courseCodes[i].trim());
-            if (courses[i] == null) {
-                System.out.println("Course with code " + courseCodes[i].trim() + " not found.");
-                return;
+        System.out.println("Enroll in Courses.");
+
+        Enrollment studentEnroll = studentService.findEnrollmentByStudentId(studentId);
+        System.out.println("Student Enroll: " + studentEnroll);
+
+        List<Course> availableCourses = new ArrayList<>();
+        studentService.getAllCourses().forEach(availableCourses::add);
+
+        List<Course> selectedCourses = new ArrayList<>();
+
+        while (true) {
+            System.out.println("List All Courses:");
+            System.out.println("Type number to select option.");
+            for (int i = 0; i < availableCourses.size(); i++) {
+                System.out.println((i + 1) + ". " + availableCourses.get(i));
+            }
+            System.out.println("Select option (0 to exit):");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            if (option == 0) {
+                break;
+            } else if (option > 0 && option <= availableCourses.size()) {
+                Course selectedCourse = availableCourses.get(option - 1);
+                if (!selectedCourses.contains(selectedCourse)) {
+                    selectedCourses.add(selectedCourse);
+                    System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                } else {
+                    System.out.println("You have already selected this course.");
+                }
+            } else {
+                System.out.println("Invalid option. Please try again.");
             }
         }
-        Enrollment enrollment = studentService.changeEnrollment(studentId, courses);
-        System.out.println("Updated Enrollments: " + enrollment);
+        if (!selectedCourses.isEmpty()) {
+            Enrollment enrollment = studentService.enrollStudentInCourse(studentId, selectedCourses.toArray(new Course[0]));
+            System.out.println("Enrolled in courses: " + enrollment);
+        } else {
+            studentService.enrollStudentInCourse(studentId, selectedCourses.toArray(new Course[0]));
+            System.out.println("No courses Enrolled.");
+        }
     }
 
     private static void deleteEnrollment() {
@@ -398,6 +628,16 @@ public class StudentUI {
         Enrollment enrollment = studentService.findEnrollmentByStudentId(studentId);
         if (enrollment != null) {
             System.out.println("Enrollment found:");
+            System.out.println(enrollment);
+        } else {
+            System.out.println("Enrollment not found.");
+        }
+    }
+
+    private static void findEnrollmentByStudentId(String studentId) {
+        Enrollment enrollment = studentService.findEnrollmentByStudentId(studentId);
+        if (enrollment != null) {
+            System.out.println("Your Enrollment:");
             System.out.println(enrollment);
         } else {
             System.out.println("Enrollment not found.");
@@ -471,17 +711,6 @@ public class StudentUI {
             courses.forEach(System.out::println);
         } else {
             System.out.println("No courses available.");
-        }
-    }
-
-    private static void viewAllStudents() {
-        Stream<Student> studentStream = studentService.getAllStudent();
-        if (studentStream.count() > 0) {
-            studentStream = studentService.getAllStudent();
-            System.out.println("All students:");
-            studentStream.forEach(System.out::println);
-        } else {
-            System.out.println("No students available.");
         }
     }
 

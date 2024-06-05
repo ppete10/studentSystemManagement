@@ -3,10 +3,12 @@ package int103;
 
 import ui.StudentUI;
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
-        var app = new StudentUI("File");
-        app.run();
+        StudentUI.start();
     }
 }
+

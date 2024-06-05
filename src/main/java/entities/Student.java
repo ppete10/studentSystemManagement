@@ -1,5 +1,8 @@
 package entities;
 
+
+import exception.InvalidStudentFormatException;
+
 import java.io.Serializable;
 
 public class Student implements Serializable {
@@ -9,6 +12,9 @@ public class Student implements Serializable {
     private int year;
 
     public Student(String studentId, String name, int age, int year ) {
+        if (studentId == null || studentId.isBlank() ||
+                name == null || name.isBlank() || age <= 0 || year <= 0)
+            throw new InvalidStudentFormatException();
         this.studentId = studentId;
         this.name = name;
         this.age = age;
@@ -35,16 +41,16 @@ public class Student implements Serializable {
         this.age = age;
     }
 
-    public int getSemester() {
+    public int getYear() {
         return year;
     }
 
-    public void setSemester(int semester) {
+    public void setYear(int semester) {
         this.year = semester;
     }
 
     @Override
     public String toString() {
-        return String.format("Student(%s,%s,%d,%d)", studentId, name, age, year);
+        return String.format("%s %s, Age: %d, Year: %d", studentId, name, age, year);
     }
 }

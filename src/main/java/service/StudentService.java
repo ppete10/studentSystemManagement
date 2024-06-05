@@ -69,9 +69,9 @@ public class StudentService {
         return enrollRepo.updateEnrollment(e, course);
     }
 
-    public Enrollment deleteEnrollment (String enrollId){
-        Enrollment e = enrollRepo.getEnrollmentByStudentId(enrollId);
-        if (enrollId == null || e == null)
+    public Enrollment deleteEnrollment (String studentEnrollId){
+        Enrollment e = enrollRepo.getEnrollmentByStudentId(studentEnrollId);
+        if (studentEnrollId == null || e == null)
             return null;
         return enrollRepo.deleteEnrollment(e);
     }
