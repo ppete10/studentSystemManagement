@@ -16,6 +16,7 @@ import repository.memory.MemEnrollmentRepo;
 import repository.memory.MemStudentRepo;
 import service.SystemService;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,21 +36,20 @@ public class StudentUI {
         String password = "int103";
         String typePass;
         String typeUser;
-        var cons = System.console();
-        var sc = new Scanner(System.in);
 
+        Console cons = System.console();
         while (true) {
             if (cons != null) {
                 System.out.print("Username: ");
-                typeUser = sc.nextLine();
+                typeUser = cons.readLine();
                 System.out.print("Password: ");
                 typePass = new String(cons.readPassword());
             } else {
                 System.out.println("[Public]");
                 System.out.print("Username: ");
-                typeUser = sc.nextLine();
+                typeUser = scanner.nextLine();
                 System.out.println("Password: ");
-                typePass = sc.nextLine();
+                typePass = scanner.nextLine();
             }
 
             if (typeUser.equals(username) && typePass.equals(password)) {
@@ -62,6 +62,13 @@ public class StudentUI {
             } else {
                 System.out.println("Invalid Username or Password, Try agian!!");
             }
+        }
+    }
+
+    private static void run() {
+        while (continueRunning) {
+            storage();
+            selectRole();
         }
     }
 
@@ -90,51 +97,39 @@ public class StudentUI {
         }
     }
 
-    private static void run() {
-        while (continueRunning) {
-            storage();
-            selectRole();
-        }
-    }
-
     private static void selectRole() {
+        String menu = """
+                ====================== Login ======================
+                1. Login for Student.
+                2. Login for Teacher.
+                3. Select Storage Type.
+                (Enter '0' to quit).""";
         while (true) {
-            System.out.println("=======================================================");
-            System.out.println("Select Storage Type[3]");
-            System.out.println("Login for Student[1] or Teacher[2]? (Enter '0' to quit)");
-            try {
-                Integer role = scanner.nextInt();
-                scanner.nextLine();
-                if (role == 0) {
-                    continueRunning = false;
-                    break;
-                } else if (role == 1) {
-                    studentLogin();
-                } else if (role == 2) {
-                    teacherActions();
-                } else if (role == 3) {
-                    break;
-                } else {
-                    System.out.println("=======================================================");
-                    System.out.println("Select Storage Type[3]");
-                    System.out.println("Invalid option. Please select Student[1] or Teacher[2].");
-                }
-            } catch (Exception e) {
-                System.out.println("=======================================================");
-                System.out.println("Select Storage Type[3]");
-                System.out.println("Invalid option. Please select Student[1] or Teacher[2].");
-                scanner.nextLine();
+            System.out.println(menu);
+            System.out.print("Select an option: ");
+            String role = scanner.nextLine();
+            if (role.equals("0")) {
+                continueRunning = false;
+                break;
+            } else if (role.equals("1")) {
+                studentLogin();
+            } else if (role.equals("2")) {
+                teacherActions();
+            } else if (role.equals("3")) {
+                break;
+            } else {
+                System.out.println("Invalid option. Please select [0-3].");
             }
         }
     }
 
     private static void studentLogin() {
-        System.out.println("=======================================================");
-        System.out.print("=== Student login ===\n");
+        System.out.println("====================== Student login ======================");
         System.out.println("Login by Student ID (Enter '0' to back)");
         Student student;
 
         while (true) {
+            System.out.print("Student ID: ");
             String studentId = scanner.nextLine();
             if (studentId.equals("0")) {
                 break;
@@ -157,15 +152,16 @@ public class StudentUI {
         while (true) {
             String menu = """
                     \n===== Menu For Student =====
-                    Select menu [1-16].
                     1. Show your Info
                     2. Update Info
                     3. View All Courses
                     4. Enroll in Courses
                     5. View your Enrollments
+                    ------------------------------
                     6. Logout
                     """;
             System.out.println(menu);
+            System.out.print("Select Menu[1-6]: ");
             int option = scanner.nextInt();
             scanner.nextLine();
 
@@ -226,12 +222,12 @@ public class StudentUI {
             System.out.println(menu);
             System.out.print("Select Menu[1-16]: ");
             int option = -1;
-                try {
-                    String input = scanner.nextLine().trim();
-                    option = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
+            try {
+                String input = scanner.nextLine().trim();
+                option = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
 
-                }
+            }
 
             switch (option) {
                 case 1:
@@ -355,7 +351,8 @@ public class StudentUI {
         Student student = systemServices.registerStudent(name, age, year);
         if (student != null) {
             System.out.println("Student registered successfully:");
-            System.out.println(student.studentToString());
+            System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+            System.out.println(student);
         } else {
             System.out.println("Failed to register student.");
         }
@@ -491,7 +488,7 @@ public class StudentUI {
             String studentId = studentcheck.getStudentId();
             Student student = systemServices.findStudentById(studentId);
             if (student != null) {
-                System.out.println("Student found: ");
+                System.out.println("--- Student found ---");
                 System.out.println("Name: " + student.getName());
                 System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
             }
@@ -505,7 +502,7 @@ public class StudentUI {
         if (studentStream.count() > 0) {
             studentStream = systemServices.getAllStudent();
             System.out.println("            All students");
-            System.out.println(String.format("%-5s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+            System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
             System.out.println("-------------------------------------");
             studentStream.forEach(System.out::println);
             System.out.println("-------------------------------------");
@@ -517,8 +514,7 @@ public class StudentUI {
     private static void showYourInfo(String studentId) {
         Student student = systemServices.findStudentById(studentId);
         System.out.println("Your Student ID: " + student.getStudentId());
-        System.out.println(student.getName());
-        System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
+        System.out.println(student.studentToString());
     }
 
     // Manage Enroll UI
@@ -669,15 +665,25 @@ public class StudentUI {
         while (!isValid) {
             try {
                 System.out.print("Enter course code: ");
-                courseCode = scanner.nextLine();
+                courseCode = scanner.nextLine().toUpperCase();
                 if (courseCode.trim().isEmpty()) {
                     throw new InvalidCourseFormatException("Course code cannot be empty");
                 }
-                isValid = true;
+
+                Course c = systemServices.getCourseByCode(courseCode);
+                if (c != null) {
+                    System.out.println("Has course code already!");
+                    System.out.println(c);
+                    return;
+                } else {
+                    isValid = true;
+                }
             } catch (InvalidCourseFormatException e) {
                 System.out.println("Invalid course code. Try again!.");
             }
         }
+
+        isValid = false;
         while (!isValid) {
             try {
                 System.out.print("Enter course name: ");
@@ -701,6 +707,13 @@ public class StudentUI {
                 }
                 credits = Integer.parseInt(input);
                 if (credits > 0) {
+                    Course course = systemServices.addCourse(courseCode, courseName, credits);
+                    if (course != null) {
+                        System.out.println("Course added successfully:");
+                        System.out.println(course);
+                    } else {
+                        System.out.println("Failed to add course.");
+                    }
                     isValid = true;
                 } else {
                     throw new InvalidStudentFormatException("Credits must be a positive integer.");
@@ -710,19 +723,6 @@ public class StudentUI {
             } catch (InvalidStudentFormatException e) {
                 System.out.println(e.getMessage());
             }
-        }
-        Course c = systemServices.getCourseByCode(courseCode);
-        if (c != null) {
-            System.out.println("Has course code already!");
-            System.out.println(c);
-            return;
-        }
-        Course course = systemServices.addCourse(courseCode, courseName, credits);
-        if (course != null) {
-            System.out.println("Course added successfully:");
-            System.out.println(course);
-        } else {
-            System.out.println("Failed to add course.");
         }
     }
 
@@ -737,10 +737,12 @@ public class StudentUI {
             try {
                 System.out.print("Enter course code: ");
                 courseCode = scanner.nextLine();
+                courseCode.toUpperCase();
                 if (courseCode.trim().isEmpty()) {
                     throw new InvalidCourseFormatException("Course code cannot be empty");
                 }
                 isValid = true;
+
             } catch (InvalidCourseFormatException e) {
                 System.out.println("Invalid course code. Try again!.");
             }
@@ -749,6 +751,7 @@ public class StudentUI {
         if (c == null) {
             System.out.println("Course not found.");
             System.out.println(c);
+            isValid = false;
             return;
         }
 

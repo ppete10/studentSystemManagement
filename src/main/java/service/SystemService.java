@@ -109,8 +109,7 @@ public class SystemService {
 
 
     public Course getCourseByCode(String courseCode){
-        Course c = getCourseByCode(courseCode);
-        if (courseCode == null || c == null)
+        if (courseCode == null)
             return null;
         return courseRepo.getCourseByCode(courseCode);
     }

@@ -51,10 +51,10 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%-5s %-20s %-5d %-5d", studentId, name, age, year);
+        return String.format("%-6s %-20s %-5d %-5d", studentId, name, age, year);
     }
 
     public String studentToString(){
-        return String.format("ID: %s %s Age: %d, Year: %d", studentId, name, age, year);
+        return String.format("%s %s Age: %d, Year: %d", studentId, name, age, year);
     }
 }

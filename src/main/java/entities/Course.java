@@ -32,6 +32,6 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Course: %s %s %d", courseCode, courseName, credits);
+        return String.format("%-5s %-6s %-3d", courseCode, courseName, credits);
     }
 }
