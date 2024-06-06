@@ -8,15 +8,14 @@ import repository.CourseMangement;
 import repository.EnrollManagement;
 import repository.StudentManagement;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
-public class StudentService {
-    private StudentManagement studentRepo;
-    private EnrollManagement enrollRepo;
+public class SystemService {
+    private final StudentManagement studentRepo;
+    private final EnrollManagement enrollRepo;
     private final CourseMangement courseRepo;
 
-    public StudentService(StudentManagement student, EnrollManagement enroll, CourseMangement course) {
+    public SystemService(StudentManagement student, EnrollManagement enroll, CourseMangement course) {
         this.studentRepo = student;
         this.enrollRepo = enroll;
         this.courseRepo = course;
@@ -34,7 +33,7 @@ public class StudentService {
         if (name == null || age <= 0 || year <= 0 || s == null)
             return null;
         Student s2 = new Student(s.getStudentId(),name, age, year);
-        return studentRepo.updateStudent(studentId, s2);
+        return studentRepo.updateStudent(s2);
     }
 
     public Student deleteStudent(String studentId) {

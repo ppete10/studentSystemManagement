@@ -13,7 +13,7 @@ public class JdbcStudentRepo implements StudentManagement {
     }
 
     @Override
-    public Student updateStudent(String studentId, Student newStudent) {
+    public Student updateStudent(Student newStudent) {
         return null;
     }
 

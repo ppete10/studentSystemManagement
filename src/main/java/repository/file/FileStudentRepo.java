@@ -56,9 +56,9 @@ public class FileStudentRepo implements StudentManagement {
     }
 
     @Override
-    public Student updateStudent(String studentId, Student s) {
+    public Student updateStudent(Student s) {
         try {
-            repo.put(s.getStudentId(), s);
+            repo.replace(s.getStudentId(), s);
         } catch (Exception e) {
             return null;
         }
