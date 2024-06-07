@@ -53,8 +53,4 @@ public class Student implements Serializable {
     public String toString() {
         return String.format("%-6s %-20s %-5d %-5d", studentId, name, age, year);
     }
-
-    public String toStringFormat(){
-        return String.format("%s %s Age: %d, Year: %d", studentId, name, age, year);
-    }
 }

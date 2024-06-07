@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 public class StudentUI {
     private static SystemService systemServices;
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static boolean continueRunning = true;
 
 
@@ -103,21 +103,26 @@ public class StudentUI {
                 2. Login for Teacher.
                 3. Select Storage Type.
                 (Enter '0' to quit).""";
+        label:
         while (true) {
             System.out.println(menu);
             System.out.print("Select an option: ");
             String role = scanner.nextLine();
-            if (role.equals("0")) {
-                continueRunning = false;
-                break;
-            } else if (role.equals("1")) {
-                studentLogin();
-            } else if (role.equals("2")) {
-                teacherActions();
-            } else if (role.equals("3")) {
-                break;
-            } else {
-                System.out.println("Invalid option. Please select [0-3].");
+            switch (role) {
+                case "0":
+                    continueRunning = false;
+                    break label;
+                case "1":
+                    studentLogin();
+                    break;
+                case "2":
+                    teacherActions();
+                    break;
+                case "3":
+                    break label;
+                default:
+                    System.out.println("Invalid option. Please select [0-3].");
+                    break;
             }
         }
     }
@@ -129,7 +134,7 @@ public class StudentUI {
 
         while (true) {
             System.out.print("Student ID: ");
-            String studentId = scanner.nextLine();
+            String studentId = scanner.nextLine().toUpperCase();
             if (studentId.equals("0")) {
                 break;
             }
@@ -357,7 +362,7 @@ public class StudentUI {
         Student student = systemServices.registerStudent(name, age, year);
         if (student != null) {
             System.out.println(" Student registered successfully:");
-            System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+            System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
             System.out.println("-------------------------------------");
             System.out.println(student);
             System.out.println("-------------------------------------");
@@ -387,7 +392,7 @@ public class StudentUI {
         boolean isValid = false;
         Student studentOld = systemServices.findStudentById(studentId);
         System.out.println("          Old Student Info");
-        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
         System.out.println("-------------------------------------");
         System.out.println(studentOld);
         System.out.println("-------------------------------------");
@@ -448,7 +453,7 @@ public class StudentUI {
 
         Student student = systemServices.reStudent(studentId, name, age, year);
         System.out.println("          Old Student Info");
-        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
         System.out.println("-------------------------------------");
         System.out.println(student);
         System.out.println("-------------------------------------");
@@ -504,7 +509,7 @@ public class StudentUI {
             Student student = systemServices.findStudentById(studentId);
             if (student != null) {
                 System.out.println("            Found students");
-                System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+                System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
                 System.out.println("-------------------------------------");
                 System.out.println(student);
                 System.out.println("-------------------------------------");
@@ -516,10 +521,10 @@ public class StudentUI {
 
     private static void viewAllStudents() {
         Stream<Student> studentStream = systemServices.getAllStudent();
-        if (studentStream.count() > 0) {
+        if (studentStream.findAny().isPresent()) {
             studentStream = systemServices.getAllStudent();
             System.out.println("              All students");
-            System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+            System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
             System.out.println("-------------------------------------");
             studentStream.forEach(System.out::println);
             System.out.println("-------------------------------------");
@@ -531,7 +536,7 @@ public class StudentUI {
     private static void showYourInfo(String studentId) {
         Student student = systemServices.findStudentById(studentId);
         System.out.println("              Your Info");
-        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
         System.out.println("-------------------------------------");
         System.out.println(student);
         System.out.println("-------------------------------------");
@@ -540,12 +545,16 @@ public class StudentUI {
     // Manage Enroll UI
     private static void enrollStudentInCourse() {
         viewAllStudents();
-        System.out.println("====== Enroll Student In Course ======");
-        Student checkStudent = checkStudentId();
-        if (checkStudent != null){
-        String studentId = checkStudent.getStudentId();
-        enrollStudentInCourse(studentId);
-        } else {
+        if (systemServices.getAllStudent().findAny().isPresent()) {
+            System.out.println("====== Enroll Student In Course ======");
+            Student checkStudent = checkStudentId();
+
+            if (checkStudent != null) {
+                String studentId = checkStudent.getStudentId();
+                enrollStudentInCourse(studentId);
+            }
+
+        }else {
             System.out.println("Enroll Student has Cancelled.");
         }
     }
@@ -554,8 +563,8 @@ public class StudentUI {
         Enrollment checkEnroll = systemServices.findEnrollmentByStudentId(studentId);
 
         if (checkEnroll != null) {
-            System.out.println("          Has enrolled already!");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
+            System.out.println("                 Has enrolled already!");
+            System.out.printf("%-6s %-7s %-30s %-3s%n","ID", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(checkEnroll);
             System.out.println("---------------------------------------------------------");
@@ -566,7 +575,7 @@ public class StudentUI {
         systemServices.getAllCourses().forEach(availableCourses::add);
 
         List<Course> selectedCourses = new ArrayList<>();
-        if (availableCourses.size() <= 0) {
+        if (availableCourses.isEmpty()) {
             System.out.println("No Courses to Enroll");
             return;
         }
@@ -574,12 +583,12 @@ public class StudentUI {
         while (true) {
 
             System.out.println("                   Available Courses:");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","Number", "Code", "Name", "Credits"));
+            System.out.printf("%-6s %-7s %-30s %-3s%n","Number", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             for (int i = 0; i < availableCourses.size(); i++) {
                 System.out.println((i + 1) + ".     " + availableCourses.get(i).toStringFormat());
             }
-            if (availableCourses.size() <= 0){
+            if (availableCourses.isEmpty()){
                 System.out.println("             No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
@@ -611,7 +620,7 @@ public class StudentUI {
         if (!selectedCourses.isEmpty()) {
             Enrollment enrollment = systemServices.enrollStudentInCourse(studentId, selectedCourses.toArray(new Course[0]));
             System.out.println("                   Enroll In Courses Success.");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
+            System.out.printf("%-6s %-7s %-30s %-3s%n","ID", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);
             System.out.println("---------------------------------------------------------");
@@ -622,6 +631,17 @@ public class StudentUI {
 
     private static void changeEnrollment() {
         viewAllEnrollments();
+        try {
+            Stream<Enrollment> any = systemServices.getAllEnrollment();
+            if(any.findAny().isEmpty()){
+                System.out.println("Update Enroll has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e){
+            System.out.println("Update Enroll has Cancelled.");
+            return;
+        }
+
         System.out.println("====== Update Enrollment ======");
         Enrollment checkEnrollId = checkEnrollId();
         if (checkEnrollId == null){
@@ -639,19 +659,19 @@ public class StudentUI {
 
 
 
-        if (availableCourses.size() <= 0) {
+        if (availableCourses.isEmpty()) {
             System.out.println("No Courses to Enroll");
             return;
         }
 
         while (true) {
             System.out.println("\n                   List All Courses");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","Number", "Code", "Name", "Credits"));
+            System.out.printf("%-6s %-7s %-30s %-3s%n","Number", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             for (int i = 0; i < availableCourses.size(); i++) {
                 System.out.println((i + 1) + ".     " + availableCourses.get(i).toStringFormat());
             }
-            if (availableCourses.size() <= 0){
+            if (availableCourses.isEmpty()){
                 System.out.println("                 No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
@@ -684,7 +704,7 @@ public class StudentUI {
             Set<Course> setCourse = new HashSet<>(selectedCourses);
             Enrollment enrollment = systemServices.changeEnrollment(enrollId,  setCourse);
             System.out.println("                 Update Enroll Success.");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","Number", "Code", "Name", "Credits"));
+            System.out.printf("%-6s %-7s %-30s %-3s%n","Number", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);
             System.out.println("---------------------------------------------------------");
@@ -696,6 +716,17 @@ public class StudentUI {
 
     private static void deleteEnrollment() {
         viewAllEnrollments();
+        try {
+            Stream<Enrollment> any = systemServices.getAllEnrollment();
+            if(any.findAny().isEmpty()){
+                System.out.println("Delete Enrollment has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e){
+            System.out.println("Delete Enrollment has Cancelled.");
+            return;
+        }
+
         System.out.println("====== Delete Enrollment ======");
         Enrollment checkEnrollId = checkEnrollId();
         if (checkEnrollId == null){
@@ -741,7 +772,7 @@ public class StudentUI {
     private static void viewEnrollment() {
         Student checkStudent = checkStudentId();
         if (checkStudent == null){
-            System.out.println("Delete Enrollment has Cancelled.");
+            System.out.println("Find Enrollment has Cancelled.");
             return;
         }
         String studentId = checkStudent.getStudentId();
@@ -750,15 +781,34 @@ public class StudentUI {
 
     private static void findEnrollmentByStudentId(String studentId) {
         Enrollment enrollment = systemServices.findEnrollmentByStudentId(studentId);
-        System.out.println("====== Find Enrollment By ID======");
+        System.out.println("                 Find Enrollment By ID");
         if (enrollment != null) {
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
+            System.out.printf("%-6s %-7s %-30s %-3s%n","ID", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);
             System.out.println("---------------------------------------------------------");
         } else {
             System.out.println("Enrollment not found.");
         }
+    }
+
+    private static void viewAllEnrollments() {
+        try {
+            Stream<Enrollment> enrollments = systemServices.getAllEnrollment();
+            if (enrollments.findAny().isPresent()) {
+                enrollments = systemServices.getAllEnrollment();
+                System.out.println("                   All Enrollments ");
+                System.out.printf("%-6s %-7s %-30s %-3s%n","ID", "Code", "Name", "Credits");
+                System.out.println("---------------------------------------------------------");
+                enrollments.forEach(System.out::println);
+                System.out.println("---------------------------------------------------------");
+            } else {
+                System.out.println("No enrollments available.");
+            }
+        } catch (NullPointerException e){
+            System.out.println("No enrollments available.");
+        }
+
     }
 
     //manage Course UI
@@ -779,7 +829,7 @@ public class StudentUI {
                 Course c = systemServices.getCourseByCode(courseCode);
                 if (c != null) {
                     System.out.println("Has course code already!");
-                    System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
+                    System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
                     System.out.println("---------------------------------------------------------");
                     System.out.println(c.toStringFormat());
                     System.out.println("---------------------------------------------------------");
@@ -819,7 +869,7 @@ public class StudentUI {
                     Course course = systemServices.addCourse(courseCode, courseName, credits);
                     if (course != null) {
                         System.out.println("              Course added successfully:");
-                        System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
+                        System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
                         System.out.println("---------------------------------------------------------");
                         System.out.println(course.toStringFormat());
                         System.out.println("---------------------------------------------------------");
@@ -866,7 +916,7 @@ public class StudentUI {
             return;
         }
 
-        System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
+        System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
         System.out.println(c);
 
         isValid = false;
@@ -907,7 +957,7 @@ public class StudentUI {
         Course course = systemServices.updateCourse(courseCode, courseName, credits);
         if (course != null) {
             System.out.println("               Course updated successfully:");
-            System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
+            System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(course.toStringFormat());
             System.out.println("---------------------------------------------------------");
@@ -941,18 +991,33 @@ public class StudentUI {
     }
 
     private static void viewCourseByCode() {
+        String courseCode;
+
         System.out.println("====== View Course By Code ======");
-        System.out.print("Enter course code: ");
-        String courseCode = scanner.nextLine();
-        Course course = systemServices.getCourseByCode(courseCode);
-        if (course != null) {
-            System.out.println("                      Course found");
-            System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
-            System.out.println("---------------------------------------------------------");
-            System.out.println(course.toStringFormat());
-            System.out.println("---------------------------------------------------------");
-        } else {
-            System.out.println("Course not found.");
+        while (true) {
+            try {
+                System.out.print("Enter student ID or Exit[0]: ");
+                courseCode = scanner.nextLine().toUpperCase();
+                if (courseCode.isEmpty() || courseCode.isBlank()) {
+                    throw new InvalidStudentFormatException("Student ID cannot be empty");
+                }
+                if (courseCode.equals("0")) {
+                    System.out.println("Cancelling...");
+                    return;
+                }
+                Course course = systemServices.getCourseByCode(courseCode);
+                if (course != null) {
+                    System.out.println("                      Course found");
+                    System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
+                    System.out.println("---------------------------------------------------------");
+                    System.out.println(course.toStringFormat());
+                    System.out.println("---------------------------------------------------------");
+                } else {
+                    System.out.println("Course not found.");
+                }
+            } catch (InvalidStudentFormatException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -962,26 +1027,12 @@ public class StudentUI {
         if (count > 0) {
             courses = systemServices.getAllCourses();
             System.out.println("                      All Courses");
-            System.out.println(String.format("%-7s %-30s %-3s", "Code", "Name", "Credits"));
+            System.out.printf("%-7s %-30s %-3s%n", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             courses.forEach(course -> System.out.println(course.toStringFormat()));
             System.out.println("---------------------------------------------------------");
         } else {
             System.out.println("No courses available.");
-        }
-    }
-
-    private static void viewAllEnrollments() {
-        Stream<Enrollment> enrollments = systemServices.getAllEnrollment();
-        if (enrollments.count() > 0) {
-            enrollments = systemServices.getAllEnrollment();
-            System.out.println("                   All Enrollments ");
-            System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
-            System.out.println("---------------------------------------------------------");
-            enrollments.forEach(System.out::println);
-            System.out.println("---------------------------------------------------------");
-        } else {
-            System.out.println("No enrollments available.");
         }
     }
 }
