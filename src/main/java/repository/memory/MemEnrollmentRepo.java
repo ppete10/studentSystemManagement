@@ -7,6 +7,7 @@ import repository.EnrollManagement;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class MemEnrollmentRepo implements EnrollManagement {
@@ -23,11 +24,9 @@ public class MemEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Enrollment updateEnrollment(Enrollment e, Course... course) {
-        for(Course c : course){
-            e.addCourse(c);
-        }
-        enrollRepo.put(e.getStudentEnrollId(), e);
+    public Enrollment updateEnrollment(Enrollment e, Set<Course> course) {
+        e.updateCourse(course);
+        enrollRepo.replace(e.getStudentEnrollId(), e);
         return e;
     }
 
@@ -50,4 +49,5 @@ public class MemEnrollmentRepo implements EnrollManagement {
     public Stream<Enrollment> getAllEnrollment() {
         return enrollRepo.values().stream();
     }
+
 }

@@ -8,6 +8,7 @@ import repository.CourseMangement;
 import repository.EnrollManagement;
 import repository.StudentManagement;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class SystemService {
@@ -61,7 +62,7 @@ public class SystemService {
         return enrollRepo.addEnrollment(studentId, course);
     }
 
-    public Enrollment changeEnrollment(String studentEnrollId, Course... course) {
+    public Enrollment changeEnrollment(String studentEnrollId, Set<Course> course) {
         Enrollment e = findEnrollmentByStudentId(studentEnrollId);
         if (studentEnrollId == null || e == null)
             return null;

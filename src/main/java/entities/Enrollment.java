@@ -31,9 +31,18 @@ public class Enrollment implements Serializable {
         this.course.add(course);
     }
 
+    public void updateCourse(Set<Course> course){
+        this.course = course;
+    }
+
     @Override
     public String toString() {
-        return String.format("(ID:%s %s)", studentEnrollId, course);
+        StringBuilder courseList = new StringBuilder();
+        for (Course c: course){
+            courseList.append("\n       ");
+            courseList.append(c.toStringFormat());
+        }
+        return String.format("%-5s%s", studentEnrollId, courseList);
     }
 
 }

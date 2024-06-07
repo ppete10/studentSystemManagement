@@ -5,6 +5,7 @@ import entities.Enrollment;
 import repository.EnrollManagement;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class JdbcEnrollmentRepo implements EnrollManagement {
@@ -14,7 +15,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Enrollment updateEnrollment(Enrollment studentEnrollId, Course[] course) {
+    public Enrollment updateEnrollment(Enrollment studentEnrollId, Set<Course> course) {
         return null;
     }
 

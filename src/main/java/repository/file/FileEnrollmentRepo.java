@@ -6,10 +6,7 @@ import entities.Student;
 import repository.EnrollManagement;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class FileEnrollmentRepo implements EnrollManagement {
@@ -63,11 +60,9 @@ public class FileEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Enrollment updateEnrollment(Enrollment e, Course[] course) {
-        for(Course c : course){
-            e.addCourse(c);
-        }
-        enrollRepo.put(e.getStudentEnrollId(), e);
+    public Enrollment updateEnrollment(Enrollment e, Set<Course> course) {
+        e.updateCourse(course);
+        enrollRepo.replace(e.getStudentEnrollId(), e);
         writeToFile();
         return e;
     }
