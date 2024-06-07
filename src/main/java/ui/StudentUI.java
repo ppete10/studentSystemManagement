@@ -696,7 +696,7 @@ public class StudentUI {
                 } else {
                     System.out.println("Invalid Number. Please try again.");
                 }
-            } catch (InvalidStudentFormatException | NumberFormatException e){
+            } catch (NumberFormatException e){
                 System.out.println("Invalid Number. Please try again.");
             }
         }
@@ -862,7 +862,7 @@ public class StudentUI {
                 System.out.print("Enter credits: ");
                 String input = scanner.nextLine().trim();
                 if (input.isEmpty() || input.isBlank()) {
-                    throw new InvalidStudentFormatException("Credits cannot be empty.");
+                    throw new InvalidCourseFormatException("Credits cannot be empty.");
                 }
                 credits = Integer.parseInt(input);
                 if (credits > 0) {
@@ -878,11 +878,11 @@ public class StudentUI {
                     }
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Credits must be a positive integer.");
+                    throw new InvalidCourseFormatException("Credits must be a positive integer.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid credits. Try again!.");
-            } catch (InvalidStudentFormatException e) {
+            } catch (InvalidCourseFormatException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -939,17 +939,17 @@ public class StudentUI {
                 System.out.print("Enter new credits: ");
                 String input = scanner.nextLine().trim();
                 if (input.isEmpty() || input.isBlank()) {
-                    throw new InvalidStudentFormatException("Credits cannot be empty.");
+                    throw new InvalidCourseFormatException("Credits cannot be empty.");
                 }
                 credits = Integer.parseInt(input);
                 if (credits > 0) {
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Credits must be a positive integer.");
+                    throw new InvalidCourseFormatException("Credits must be a positive integer.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid credits. Try again!.");
-            } catch (InvalidStudentFormatException e) {
+            } catch (InvalidCourseFormatException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -999,7 +999,7 @@ public class StudentUI {
                 System.out.print("Enter student ID or Exit[0]: ");
                 courseCode = scanner.nextLine().toUpperCase();
                 if (courseCode.isEmpty() || courseCode.isBlank()) {
-                    throw new InvalidStudentFormatException("Student ID cannot be empty");
+                    throw new InvalidCourseFormatException("Student ID cannot be empty");
                 }
                 if (courseCode.equals("0")) {
                     System.out.println("Cancelling...");
@@ -1015,7 +1015,7 @@ public class StudentUI {
                 } else {
                     System.out.println("Course not found.");
                 }
-            } catch (InvalidStudentFormatException e) {
+            } catch (InvalidCourseFormatException e) {
                 System.out.println(e.getMessage());
             }
         }

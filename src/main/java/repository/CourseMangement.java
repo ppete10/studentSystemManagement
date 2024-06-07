@@ -2,7 +2,6 @@ package repository;
 
 import entities.Course;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 public interface CourseMangement {

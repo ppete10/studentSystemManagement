@@ -2,7 +2,6 @@ package repository.file;
 
 import entities.Course;
 import entities.Enrollment;
-import entities.Student;
 import repository.EnrollManagement;
 
 import java.io.*;
@@ -10,7 +9,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class FileEnrollmentRepo implements EnrollManagement {
-    private String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
+    private String PATH = ".\\repoFile\\";
     private String filename = PATH + "enrollment.dat";
     private static long nextCode = 0;
     private Map<String, Enrollment> enrollRepo;

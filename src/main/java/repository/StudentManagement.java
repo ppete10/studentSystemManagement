@@ -1,9 +1,7 @@
 package repository;
 
-import entities.Enrollment;
 import entities.Student;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 public interface StudentManagement {

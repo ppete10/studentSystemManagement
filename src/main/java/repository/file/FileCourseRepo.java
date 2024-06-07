@@ -1,17 +1,15 @@
 package repository.file;
 
 import entities.Course;
-import entities.Student;
 import repository.CourseMangement;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class FileCourseRepo implements CourseMangement {
-    private String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
+    private String PATH = ".\\repoFile\\";
     private String filename = PATH + "course.dat";
     private Map<String, Course> courseRepo;
 

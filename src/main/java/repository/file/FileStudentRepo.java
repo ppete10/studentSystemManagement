@@ -4,13 +4,12 @@ import entities.Student;
 import repository.StudentManagement;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class FileStudentRepo implements StudentManagement {
-    private String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
+    private String PATH = ".\\repoFile\\";
     private String filename = PATH + "student.dat";
     private long nextStudentId = 0;
     private Map<String, Student> repo;
