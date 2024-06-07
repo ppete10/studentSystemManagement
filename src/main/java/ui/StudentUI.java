@@ -161,8 +161,14 @@ public class StudentUI {
                     """;
             System.out.println(menu);
             System.out.print("Select Menu[1-6]: ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            int option;
+            try {
+                String input = scanner.nextLine().trim();
+                option = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid Menu. Try again.");
+                continue;
+            }
 
             switch (option) {
                 case 1:
@@ -220,12 +226,13 @@ public class StudentUI {
                     """;
             System.out.println(menu);
             System.out.print("Select Menu[1-16]: ");
-            int option = -1;
+            int option;
             try {
                 String input = scanner.nextLine().trim();
                 option = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-
+                System.out.println("Invalid Menu. Try again.");
+                continue;
             }
 
             switch (option) {
@@ -314,10 +321,10 @@ public class StudentUI {
                     throw new InvalidStudentFormatException("Age cannot be empty.");
                 }
                 age = Integer.parseInt(input);
-                if (age > 0) {
+                if (age > 0 && age <= 100) {
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                    throw new InvalidStudentFormatException("Age must be a positive integer and less than 100.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid age. Try again!.");
@@ -335,10 +342,10 @@ public class StudentUI {
                     throw new InvalidStudentFormatException("Year cannot be empty.");
                 }
                 year = Integer.parseInt(input);
-                if (year > 0) {
+                if (year > 0 && year <= 4) {
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                    throw new InvalidStudentFormatException("Year must be a number between 1 and 4.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid year. Try again!.");
@@ -349,9 +356,11 @@ public class StudentUI {
 
         Student student = systemServices.registerStudent(name, age, year);
         if (student != null) {
-            System.out.println("Student registered successfully:");
+            System.out.println(" Student registered successfully:");
             System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+            System.out.println("-------------------------------------");
             System.out.println(student);
+            System.out.println("-------------------------------------");
         } else {
             System.out.println("Failed to register student.");
         }
@@ -377,8 +386,11 @@ public class StudentUI {
         int year = 0;
         boolean isValid = false;
         Student studentOld = systemServices.findStudentById(studentId);
-        System.out.println("Name: " + studentOld.getName());
-        System.out.println("Age: " + studentOld.getAge() + ", Year: " + studentOld.getYear());
+        System.out.println("          Old Student Info");
+        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.println("-------------------------------------");
+        System.out.println(studentOld);
+        System.out.println("-------------------------------------");
         while (!isValid) {
             try {
                 System.out.print("Enter new Name: ");
@@ -401,10 +413,10 @@ public class StudentUI {
                     throw new InvalidStudentFormatException("Age cannot be empty.");
                 }
                 age = Integer.parseInt(input);
-                if (age > 0) {
+                if (age > 0 && age <= 100) {
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                    throw new InvalidStudentFormatException("Age must be a positive integer and less than 100.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid age. Try again!.");
@@ -422,10 +434,10 @@ public class StudentUI {
                     throw new InvalidStudentFormatException("Year cannot be empty.");
                 }
                 year = Integer.parseInt(input);
-                if (year > 0) {
+                if (year > 0 && year <= 4) {
                     isValid = true;
                 } else {
-                    throw new InvalidStudentFormatException("Age must be a positive integer.");
+                    throw new InvalidStudentFormatException("Year must be a number between 1 and 4.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid year. Try again!.");
@@ -435,10 +447,11 @@ public class StudentUI {
         }
 
         Student student = systemServices.reStudent(studentId, name, age, year);
-        System.out.println("---------------------------");
-        System.out.println("Update Success  ");
-        System.out.println("Name: " + student.getName());
-        System.out.println("Age: " + student.getAge() + " Year: " + student.getYear());
+        System.out.println("          Old Student Info");
+        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.println("-------------------------------------");
+        System.out.println(student);
+        System.out.println("-------------------------------------");
     }
 
     private static Student checkStudentId() {
@@ -517,8 +530,11 @@ public class StudentUI {
 
     private static void showYourInfo(String studentId) {
         Student student = systemServices.findStudentById(studentId);
-        System.out.println("Your Student ID: " + student.getStudentId());
-        System.out.println(student.toStringFormat());
+        System.out.println("              Your Info");
+        System.out.println(String.format("%-6s %-20s %-5s %-5s", "ID", "Name", "Age", "Year"));
+        System.out.println("-------------------------------------");
+        System.out.println(student);
+        System.out.println("-------------------------------------");
     }
 
     // Manage Enroll UI
@@ -540,9 +556,9 @@ public class StudentUI {
         if (checkEnroll != null) {
             System.out.println("          Has enrolled already!");
             System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
             System.out.println(checkEnroll);
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
             return;
         }
 
@@ -567,25 +583,29 @@ public class StudentUI {
                 System.out.println("             No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
-            System.out.print("Select option (0 to exit):");
+            System.out.print("Select Number (0 to exit):");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            String input = scanner.nextLine();
 
-            if (option == 0) {
-                break;
-            } else if (option > 0 && option <= availableCourses.size()) {
-                Course selectedCourse = availableCourses.get(option - 1);
+            try {
+                int option = Integer.parseInt(input);
+                if (option == 0) {
+                    break;
+                } else if (option > 0 && option <= availableCourses.size()) {
+                    Course selectedCourse = availableCourses.get(option - 1);
 
-                if (!selectedCourses.contains(selectedCourse)) {
-                    selectedCourses.add(selectedCourse);
-                    availableCourses.remove(selectedCourse);
-                    System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                    if (!selectedCourses.contains(selectedCourse)) {
+                        selectedCourses.add(selectedCourse);
+                        availableCourses.remove(selectedCourse);
+                        System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                    } else {
+                        System.out.println("Have already selected this course.");
+                    }
                 } else {
-                    System.out.println("Have already selected this course.");
+                    System.out.println("Invalid Number. Please try again.");
                 }
-            } else {
-                System.out.println("Invalid option. Please try again.");
+            } catch ( NumberFormatException e ){
+                System.out.println("Invalid Number. Please try again.");
             }
         }
         if (!selectedCourses.isEmpty()) {
@@ -611,7 +631,7 @@ public class StudentUI {
         String enrollId = checkEnrollId.getStudentEnrollId();
 
         Enrollment studentEnroll = systemServices.findEnrollmentByStudentId(enrollId);
-        System.out.println(studentEnroll.getStudentEnrollId() + "has Enroll: " + studentEnroll.getCourse());
+        System.out.println(studentEnroll.getStudentEnrollId() + " has Enroll " + studentEnroll.getCourse());
 
         List<Course> availableCourses = new ArrayList<>();
         List<Course> selectedCourses = new ArrayList<>();
@@ -623,7 +643,7 @@ public class StudentUI {
             System.out.println("No Courses to Enroll");
             return;
         }
-        studentEnroll.getCourse().clear();
+
         while (true) {
             System.out.println("\n                   List All Courses");
             System.out.println(String.format("%-6s %-7s %-30s %-3s","Number", "Code", "Name", "Credits"));
@@ -635,30 +655,39 @@ public class StudentUI {
                 System.out.println("                 No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
-            System.out.print("Select option (0 to exit):");
+            System.out.println("This menu will replace all courses. If no courses are selected, it will be empty.");
+            System.out.print("Select Number (0 to exit):");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                String input = scanner.nextLine();
+                int option = Integer.parseInt(input);
 
-            if (option == 0) {
-                break;
-            } else if (option > 0 && option <= availableCourses.size()) {
-                Course selectedCourse = availableCourses.get(option - 1);
-                if (!selectedCourses.contains(selectedCourse)) {
-                    selectedCourses.add(selectedCourse);
-                    availableCourses.remove(selectedCourse);
-                    System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                if (option == 0) {
+                    break;
+                } else if (option > 0 && option <= availableCourses.size()) {
+                    Course selectedCourse = availableCourses.get(option - 1);
+                    if (!selectedCourses.contains(selectedCourse)) {
+                        selectedCourses.add(selectedCourse);
+                        availableCourses.remove(selectedCourse);
+                        System.out.println("Course " + selectedCourse.getCourseCode() + " added.");
+                    } else {
+                        System.out.println("You have already selected this course.");
+                    }
                 } else {
-                    System.out.println("You have already selected this course.");
+                    System.out.println("Invalid Number. Please try again.");
                 }
-            } else {
-                System.out.println("Invalid option. Please try again.");
+            } catch (InvalidStudentFormatException | NumberFormatException e){
+                System.out.println("Invalid Number. Please try again.");
             }
         }
         if (!selectedCourses.isEmpty()) {
             Set<Course> setCourse = new HashSet<>(selectedCourses);
             Enrollment enrollment = systemServices.changeEnrollment(enrollId,  setCourse);
-            System.out.println("Enrolled in courses: " + enrollment);
+            System.out.println("                 Update Enroll Success.");
+            System.out.println(String.format("%-6s %-7s %-30s %-3s","Number", "Code", "Name", "Credits"));
+            System.out.println("---------------------------------------------------------");
+            System.out.println(enrollment);
+            System.out.println("---------------------------------------------------------");
         } else {
             systemServices.changeEnrollment(enrollId, new HashSet<>());
             System.out.println("No courses Enrolled.");
@@ -703,7 +732,7 @@ public class StudentUI {
                 } else {
                     System.out.println("Not Found student ID. Try again!.");
                 }
-            } catch (InvalidStudentFormatException e) {
+            } catch (InvalidEnrollmentFormatException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -724,9 +753,9 @@ public class StudentUI {
         System.out.println("====== Find Enrollment By ID======");
         if (enrollment != null) {
             System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
         } else {
             System.out.println("Enrollment not found.");
         }
@@ -946,11 +975,11 @@ public class StudentUI {
         Stream<Enrollment> enrollments = systemServices.getAllEnrollment();
         if (enrollments.count() > 0) {
             enrollments = systemServices.getAllEnrollment();
-            System.out.println("          All Enrollments ");
+            System.out.println("                   All Enrollments ");
             System.out.println(String.format("%-6s %-7s %-30s %-3s","ID", "Code", "Name", "Credits"));
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
             enrollments.forEach(System.out::println);
-            System.out.println("--------------------------------------------");
+            System.out.println("---------------------------------------------------------");
         } else {
             System.out.println("No enrollments available.");
         }
