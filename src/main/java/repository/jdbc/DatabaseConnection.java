@@ -4,13 +4,16 @@ import java.sql.*;
 
 public class DatabaseConnection {
 
+    //Access: sun.jdbc.odbc.JdbcOdbcDriver
+    //MySQL: com.mysql.cj.jdbc.Driver
+    //Oracle: oracle.jdbc.driver.OracleDriver
+    private static final String DBMS = "com.mysql.cj.jdbc.Driver";
     //Access jdbc:odbc:dataSource
     //MySQL jdbc:mysql://hostname:port/dbname
     //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
-    private static final String DBMS = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String USERNAME = "roota";
-    private static final String PASSWORD = "030130";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "1212548Pp_";
 
     private static final String DATABASENAME = "SystemStudentRepo";
     private static final String JDBC_URL = URL + DATABASENAME;
@@ -50,7 +53,7 @@ public class DatabaseConnection {
 
 
     private static void createDatabaseIfNotExists() {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", USERNAME, PASSWORD);
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
 
             ResultSet resultSet = conn.getMetaData().getCatalogs();
@@ -65,7 +68,7 @@ public class DatabaseConnection {
             resultSet.close();
 
             if (!databaseExists) {
-                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS SystemStudentRepo");
+                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ DATABASENAME);
                 System.out.println("Database 'SystemStudentRepo' created successfully.");
             }
         } catch (SQLException ignored) {
