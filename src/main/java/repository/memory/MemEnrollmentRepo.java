@@ -5,13 +5,13 @@ import entities.Enrollment;
 import repository.EnrollManagement;
 
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
 public class MemEnrollmentRepo implements EnrollManagement {
-    private static long nextCode = 0;
-    private Map<String, Enrollment> enrollRepo;
+    private Map<String, Enrollment> enrollRepo = new HashMap<>();
     @Override
     public Enrollment addEnrollment(String enrollId, Set<Course> c) {
         Enrollment e = new Enrollment(enrollId);

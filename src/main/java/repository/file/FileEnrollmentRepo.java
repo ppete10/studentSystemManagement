@@ -5,6 +5,7 @@ import entities.Enrollment;
 import repository.EnrollManagement;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -25,13 +26,13 @@ public class FileEnrollmentRepo implements EnrollManagement {
                  ObjectInputStream oi = new ObjectInputStream(bi)) {
 
                 nextCode = oi.readLong();
-                enrollRepo = (TreeMap<String, Enrollment>) oi.readObject();
+                enrollRepo = (HashMap<String, Enrollment>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
             nextCode = 1;
-            enrollRepo = new TreeMap<>();
+            enrollRepo = new HashMap<>();
         }
     }
 

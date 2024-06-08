@@ -1,43 +1,48 @@
 package repository.jdbc;
 
 import java.sql.*;
-
 public class DatabaseConnection {
 
     //Access: sun.jdbc.odbc.JdbcOdbcDriver
     //MySQL: com.mysql.cj.jdbc.Driver
     //Oracle: oracle.jdbc.driver.OracleDriver
-    private static final String DBMS = "com.mysql.cj.jdbc.Driver";
+    private static DBMS selectedDBMS = DBMS.MYSQL; //Default
     //Access jdbc:odbc:dataSource
     //MySQL jdbc:mysql://hostname:port/dbname
     //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
-    private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "password";
-
+    private static String USERNAME;
+    private static String PASSWORD;
     private static final String DATABASENAME = "SystemStudentRepo";
-    private static final String JDBC_URL = URL + DATABASENAME;
 
-    static {
+    public DatabaseConnection(String USERNAME, String PASSWORD) {
+        this.USERNAME = USERNAME;
+        this.PASSWORD = PASSWORD;
+    }
+
+    public void setDBMS(DBMS dbms) {
+        selectedDBMS = dbms;
         try {
-            Class.forName(DBMS);
+            Class.forName(selectedDBMS.getDriverClass());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to load JDBC driver");
+            throw new RuntimeException("Failed to load JDBC driver",e);
         }
+    }
+    private static String getJdbcUrl(){
+        return selectedDBMS.getUrl() + DATABASENAME;
     }
 
     public static Connection getConnection() throws SQLException {
-        if (!isDatabaseExists(DATABASENAME)) {
+        if (!isDatabaseExists()) {
             createDatabaseIfNotExists();
         }
-        return DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+        return DriverManager.getConnection(getJdbcUrl(), USERNAME, PASSWORD);
     }
 
-    private static boolean isDatabaseExists(String databaseName) {
-        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+    private static boolean isDatabaseExists() {
+        try (Connection conn = DriverManager.getConnection(selectedDBMS.getUrl(), USERNAME, PASSWORD)) {
             ResultSet resultSet = conn.getMetaData().getCatalogs();
             while (resultSet.next()) {
-                if (resultSet.getString(1).equalsIgnoreCase(databaseName)) {
+                if (resultSet.getString(1).equalsIgnoreCase(DATABASENAME)) {
                     return true;
                 }
             }
@@ -50,7 +55,7 @@ public class DatabaseConnection {
 
 
     private static void createDatabaseIfNotExists() {
-        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try (Connection conn = DriverManager.getConnection(selectedDBMS.getUrl(), USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
 
             ResultSet resultSet = conn.getMetaData().getCatalogs();

@@ -4,6 +4,7 @@ import entities.Student;
 import repository.StudentManagement;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -22,12 +23,12 @@ public class FileStudentRepo implements StudentManagement {
                  ObjectInputStream oi = new ObjectInputStream(bi)) {
 
                 nextId = oi.readLong();
-                repo = (TreeMap<String, Student>) oi.readObject();
+                repo = (HashMap<String, Student>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            repo = new TreeMap<>();
+            repo = new HashMap<>();
         }
     }
 

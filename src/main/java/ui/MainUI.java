@@ -12,7 +12,6 @@ import repository.memory.MemEnrollmentRepo;
 import repository.memory.MemStudentRepo;
 import service.SystemService;
 
-import java.io.Console;
 import java.util.Scanner;
 
 import static ui.CourseUI.*;
@@ -28,38 +27,10 @@ public class MainUI {
     public static void start() {
         System.out.println("         Welcome to Student System Management");
         System.out.println("=======================================================");
-        System.out.println("Please Login.");
-        String username = "admin";
-        String password = "int103";
-        String typePass;
-        String typeUser;
-
-        Console cons = System.console();
-        while (true) {
-            if (cons != null) {
-                System.out.print("Username: ");
-                typeUser = cons.readLine();
-                System.out.print("Password: ");
-                typePass = new String(cons.readPassword());
-            } else {
-                System.out.println("[Public]");
-                System.out.print("Username: ");
-                typeUser = scanner.nextLine();
-                System.out.print("Password: ");
-                typePass = scanner.nextLine();
-            }
-
-            if (typeUser.equals(username) && typePass.equals(password)) {
-                run();
-
-                System.out.println("=======================================================");
-                System.out.println("Thank you!! for using Student System Management");
-                System.out.println("Have a nice day!!");
-                break;
-            } else {
-                System.out.println("Invalid Username or Password, Try agian!!");
-            }
-        }
+        run();
+        System.out.println("=======================================================");
+        System.out.println("Thank you!! for using Student System Management");
+        System.out.println("Have a nice day!!");
     }
 
     private static void run() {
@@ -81,7 +52,7 @@ public class MainUI {
                 case "file":
                     try {
                         systemServices = new SystemService(new FileStudentRepo(), new FileEnrollmentRepo(), new FileCourseRepo());
-                        System.out.println("Using file storage type.");
+                        System.out.println("Using File storage type.");
                         break;
                     } catch (Exception e) {
                         System.out.println("File storage type cannot be used.");
@@ -89,8 +60,9 @@ public class MainUI {
                     }
                 case "jdbc":
                     try {
+                        jdbcUI.connectDB();
                         systemServices = new SystemService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
-                        System.out.println("Database 'SystemStudentRepo' Connected");
+                        System.out.println("Using Database storage type.");
                         break;
                     } catch (Exception e) {
                         System.out.println("Database storage type cannot be used.");
@@ -98,7 +70,7 @@ public class MainUI {
                     }
                 case "memory":
                     systemServices = new SystemService(new MemStudentRepo(), new MemEnrollmentRepo(), new MemCourseRepo());
-                    System.out.println("Using memory storage type.");
+                    System.out.println("Using Memory storage type.");
                     break;
                 default:
                     System.out.println("Invalid option, Please select [File, jdbc, Memory]!");

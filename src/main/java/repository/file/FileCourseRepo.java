@@ -4,6 +4,7 @@ import entities.Course;
 import repository.CourseMangement;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -26,7 +27,7 @@ public class FileCourseRepo implements CourseMangement {
 
             }
         } else {
-            courseRepo = new TreeMap<>();
+            courseRepo = new HashMap<>();
         }
     }
 
