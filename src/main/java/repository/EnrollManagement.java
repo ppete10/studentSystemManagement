@@ -8,10 +8,14 @@ import java.util.stream.Stream;
 
 
 public interface EnrollManagement {
-    Enrollment addEnrollment(String enrollId, Course... course);
+    Enrollment addEnrollment(String enrollId, Set<Course> course);
+
     Enrollment updateEnrollment(Enrollment studentEnrollId, Set<Course> course);
+
     Enrollment deleteEnrollment(Enrollment enrollId);
+
     Enrollment getEnrollmentByStudentId(String studentEnrollId);
+
     Stream<Enrollment> getAllEnrollment();
 
 }

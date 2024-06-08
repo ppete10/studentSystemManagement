@@ -11,7 +11,7 @@ public class Student implements Serializable {
     private int age;
     private int year;
 
-    public Student(String studentId, String name, int age, int year ) {
+    public Student(String studentId, String name, int age, int year) {
         if (studentId == null || studentId.isBlank() ||
                 name == null || name.isBlank() || age <= 0 || year <= 0)
             throw new InvalidStudentFormatException();

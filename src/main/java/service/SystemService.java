@@ -33,7 +33,7 @@ public class SystemService {
         Student s = studentRepo.findStudentById(studentId);
         if (name == null || age <= 0 || year <= 0 || s == null)
             return null;
-        Student s2 = new Student(s.getStudentId(),name, age, year);
+        Student s2 = new Student(s.getStudentId(), name, age, year);
         return studentRepo.updateStudent(s2);
     }
 
@@ -56,7 +56,7 @@ public class SystemService {
 
 
     // managing enrollment
-    public Enrollment enrollStudentInCourse(String studentId, Course... course) {
+    public Enrollment enrollStudentInCourse(String studentId, Set<Course> course) {
         if (studentId == null || findStudentById(studentId) == null)
             return null;
         return enrollRepo.addEnrollment(studentId, course);
@@ -69,7 +69,7 @@ public class SystemService {
         return enrollRepo.updateEnrollment(e, course);
     }
 
-    public Enrollment deleteEnrollment (String studentEnrollId){
+    public Enrollment deleteEnrollment(String studentEnrollId) {
         Enrollment e = enrollRepo.getEnrollmentByStudentId(studentEnrollId);
         if (studentEnrollId == null || e == null)
             return null;
@@ -101,7 +101,8 @@ public class SystemService {
         Course c2 = new Course(courseCode, courseName, credits);
         return courseRepo.updateCourse(courseCode, c2);
     }
-    public Course deleteCourse(String courseCode){
+
+    public Course deleteCourse(String courseCode) {
         Course c = courseRepo.getCourseByCode(courseCode);
         if (courseCode == null || c == null)
             return null;
@@ -109,7 +110,7 @@ public class SystemService {
     }
 
 
-    public Course getCourseByCode(String courseCode){
+    public Course getCourseByCode(String courseCode) {
         if (courseCode == null)
             return null;
         return courseRepo.getCourseByCode(courseCode);

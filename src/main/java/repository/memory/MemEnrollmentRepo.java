@@ -13,11 +13,8 @@ public class MemEnrollmentRepo implements EnrollManagement {
     private static long nextCode = 0;
     private Map<String, Enrollment> enrollRepo;
     @Override
-    public Enrollment addEnrollment(String enrollId, Course... course) {
+    public Enrollment addEnrollment(String enrollId, Set<Course> c) {
         Enrollment e = new Enrollment(enrollId);
-        for(Course c : course){
-            e.addCourse(c);
-        }
         enrollRepo.put(e.getStudentEnrollId(), e);
         return e;
     }

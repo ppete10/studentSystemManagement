@@ -1,6 +1,6 @@
 package exception;
 
-public class InvalidStudentFormatException extends RuntimeException{
+public class InvalidStudentFormatException extends RuntimeException {
     public InvalidStudentFormatException() {
         super();
     }

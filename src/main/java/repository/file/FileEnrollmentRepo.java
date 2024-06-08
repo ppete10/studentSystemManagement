@@ -5,7 +5,9 @@ import entities.Enrollment;
 import repository.EnrollManagement;
 
 import java.io.*;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class FileEnrollmentRepo implements EnrollManagement {
@@ -13,11 +15,8 @@ public class FileEnrollmentRepo implements EnrollManagement {
     private String filename = PATH + "enrollment.dat";
     private static long nextCode = 0;
     private Map<String, Enrollment> enrollRepo;
-    public FileEnrollmentRepo(){
-        loadFromFile();
-    }
 
-    private void loadFromFile() {
+    public FileEnrollmentRepo() {
         File file = new File(filename);
         if (file.exists()) {
             try (FileInputStream fi = new FileInputStream(file);
@@ -48,9 +47,9 @@ public class FileEnrollmentRepo implements EnrollManagement {
     }
 
     @Override
-    public Enrollment addEnrollment(String enrollId, Course... course) {
+    public Enrollment addEnrollment(String enrollId, Set<Course> course) {
         Enrollment e = new Enrollment(enrollId);
-        for(Course c : course){
+        for (Course c : course) {
             e.addCourse(c);
         }
         enrollRepo.put(e.getStudentEnrollId(), e);
@@ -79,13 +78,11 @@ public class FileEnrollmentRepo implements EnrollManagement {
 
     @Override
     public Enrollment getEnrollmentByStudentId(String studentEnrollId) {
-        loadFromFile();
         return enrollRepo.get(studentEnrollId);
     }
 
     @Override
     public Stream<Enrollment> getAllEnrollment() {
-        loadFromFile();
         return enrollRepo.values().stream();
     }
 }

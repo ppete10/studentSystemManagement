@@ -1,6 +1,6 @@
 package exception;
 
-public class InvalidEnrollmentFormatException extends RuntimeException{
+public class InvalidEnrollmentFormatException extends RuntimeException {
     public InvalidEnrollmentFormatException() {
         super();
     }

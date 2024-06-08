@@ -11,17 +11,17 @@ import java.util.stream.Stream;
 public class FileStudentRepo implements StudentManagement {
     private String PATH = ".\\repoFile\\";
     private String filename = PATH + "student.dat";
-    private long nextStudentId = 0;
+    private long nextId = 0;
     private Map<String, Student> repo;
 
-    public FileStudentRepo(){
+    public FileStudentRepo() {
         File file = new File(filename);
         if (file.exists()) {
             try (FileInputStream fi = new FileInputStream(file);
                  BufferedInputStream bi = new BufferedInputStream(fi);
                  ObjectInputStream oi = new ObjectInputStream(bi)) {
 
-                nextStudentId = oi.readLong();
+                nextId = oi.readLong();
                 repo = (TreeMap<String, Student>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -36,7 +36,7 @@ public class FileStudentRepo implements StudentManagement {
              BufferedOutputStream bos = new BufferedOutputStream(fos);
              ObjectOutputStream oos = new ObjectOutputStream(bos)) {
 
-            oos.writeLong(nextStudentId);
+            oos.writeLong(nextId);
             oos.writeObject(repo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class FileStudentRepo implements StudentManagement {
 
     @Override
     public Student addStudent(String name, int age, int year) {
-        String studentId = "S66" + ++nextStudentId;
+        String studentId = "S66" + String.format("%03d", ++nextId);
         Student s = new Student(studentId, name, age, year);
         if (repo.putIfAbsent(studentId, s) == null) {
             writeToFile();
@@ -78,7 +78,7 @@ public class FileStudentRepo implements StudentManagement {
 
     @Override
     public Student findStudentById(String studentId) {
-       return repo.get(studentId);
+        return repo.get(studentId);
     }
 
     @Override

@@ -34,7 +34,8 @@ public class Course implements Serializable {
     public String toString() {
         return String.format("%s %s %d", courseCode, courseName, credits);
     }
-    public String toStringFormat(){
+
+    public String toStringFormat() {
         return String.format("%-7s %-30s %-3d", courseCode, courseName, credits);
     }
 }

@@ -14,7 +14,7 @@ public class MemStudentRepo implements StudentManagement {
 
     @Override
     public Student addStudent(String name, int age, int year) {
-        String studentId = "S66" + ++nextId;
+        String studentId = "S66" + String.format("%03d", ++nextId);
         Student s = new Student(studentId, name, age, year);
         if (repo.putIfAbsent(studentId, s) == null)
             return s;
