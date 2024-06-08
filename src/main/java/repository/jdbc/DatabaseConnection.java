@@ -18,9 +18,6 @@ public class DatabaseConnection {
     private static final String DATABASENAME = "SystemStudentRepo";
     private static final String JDBC_URL = URL + DATABASENAME;
 
-    //Access: sun.jdbc.odbc.JdbcOdbcDriver
-    //MySQL: com.mysql.cj.jdbc.Driver
-    //Oracle: oracle.jdbc.driver.OracleDriver
     static {
         try {
             Class.forName(DBMS);
