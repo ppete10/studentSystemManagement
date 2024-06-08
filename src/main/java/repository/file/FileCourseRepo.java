@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import static repository.file.FileStudentRepo.PATH;
+
 public class FileCourseRepo implements CourseMangement {
-    private String PATH = ".\\repoFile\\";
     private String filename = PATH + "course.dat";
     private Map<String, Course> courseRepo;
 

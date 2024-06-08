@@ -13,7 +13,7 @@ public class DatabaseConnection {
     //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
     private static final String URL = "jdbc:mysql://localhost:3306/";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "1212548Pp_";
+    private static final String PASSWORD = "password";
 
     private static final String DATABASENAME = "SystemStudentRepo";
     private static final String JDBC_URL = URL + DATABASENAME;

@@ -25,7 +25,7 @@ public class JdbcStudentRepo implements StudentManagement {
                         + "student_Id VARCHAR(10) PRIMARY KEY,"
                         + "name VARCHAR(100) NOT NULL,"
                         + "age INT,"
-                        + "year INT"
+                        + "\"year\" INT"
                         + ")";
                 stmt.executeUpdate(createTableSQL);
             }
@@ -53,7 +53,7 @@ public class JdbcStudentRepo implements StudentManagement {
     @Override
     public Student addStudent(String name, int age, int year) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Students (student_Id, name, age, year) VALUES (?, ?, ?, ?)")) {
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Students (student_Id, name, age, \"year\") VALUES (?, ?, ?, ?)")) {
 
             String studentId = generateStudentId(conn);
             stmt.setString(1, studentId);
@@ -76,7 +76,7 @@ public class JdbcStudentRepo implements StudentManagement {
     @Override
     public Student updateStudent(Student s) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, year=? WHERE student_Id=?")) {
+             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, \"year\"=? WHERE student_Id=?")) {
 
             stmt.setString(1, s.getName());
             stmt.setInt(2, s.getAge());
