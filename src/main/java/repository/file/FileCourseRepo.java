@@ -22,7 +22,7 @@ public class FileCourseRepo implements CourseMangement {
 
                 courseRepo = (TreeMap<String, Course>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+
             }
         } else {
             courseRepo = new TreeMap<>();
@@ -35,8 +35,9 @@ public class FileCourseRepo implements CourseMangement {
              ObjectOutputStream oos = new ObjectOutputStream(bos)) {
 
             oos.writeObject(courseRepo);
+            oos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
     }
 

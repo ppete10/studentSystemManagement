@@ -24,14 +24,13 @@ public class MainUI {
     static final Scanner scanner = new Scanner(System.in);
     private static boolean continueRunning = true;
 
-    private static StudentUI studentUI;
 
     public static void start() {
         System.out.println("         Welcome to Student System Management");
         System.out.println("=======================================================");
         System.out.println("Please Login.");
         String username = "admin";
-        String password = "studentSystemManagement";
+        String password = "int103";
         String typePass;
         String typeUser;
 
@@ -114,12 +113,11 @@ public class MainUI {
                 ====================== Login ======================
                 1. Login for Student.
                 2. Login for Teacher.
-                3. Select Storage Type.
-                (Enter '0' to quit).""";
+                3. Select Storage Type.""";
         label:
         while (true) {
             System.out.println(menu);
-            System.out.print("Select an option: ");
+            System.out.print("Select an option (Enter '0' to quit): ");
             String role = scanner.nextLine();
             switch (role) {
                 case "0":

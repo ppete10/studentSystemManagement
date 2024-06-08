@@ -68,7 +68,7 @@ public class EnrollmentUI {
                 System.out.println("             No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
-            System.out.println("This menu will replace all courses. If no courses are selected, it will be empty.");
+            System.out.println("If no courses are selected, it will be empty.");
             System.out.print("Type number (Choose one Number at a time) (0 to exit):");
 
             String input = scanner.nextLine();
@@ -153,7 +153,7 @@ public class EnrollmentUI {
                 System.out.println("                 No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
-            System.out.println("This menu will replace all courses. If no courses are selected, it will be empty.");
+            System.out.println("This menu will replace all courses. If no courses are selected, nothing will be changes.");
             System.out.print("Type number (Choose one Number at a time) (0 to exit):");
 
             try {
@@ -249,6 +249,7 @@ public class EnrollmentUI {
     }
 
     static void viewEnrollment() {
+        System.out.println("====== Find Enrollment By ID ======");
         Student checkStudent = checkStudentId();
         if (checkStudent == null) {
             System.out.println("Find Enrollment has Cancelled.");
@@ -260,8 +261,8 @@ public class EnrollmentUI {
 
     static void findEnrollmentByStudentId(String studentId) {
         Enrollment enrollment = systemServices.findEnrollmentByStudentId(studentId);
-        System.out.println("                 Find Enrollment By ID");
         if (enrollment != null) {
+            System.out.println("                    Found Enrollment");
             System.out.printf("%-6s %-7s %-30s %-3s%n", "ID", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);

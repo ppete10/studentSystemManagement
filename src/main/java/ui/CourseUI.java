@@ -197,10 +197,10 @@ public class CourseUI {
         System.out.println("====== View Course By Code ======");
         while (true) {
             try {
-                System.out.print("Enter student ID or Exit[0]: ");
+                System.out.print("Enter Course Code or Exit[0]: ");
                 courseCode = scanner.nextLine().toUpperCase();
                 if (courseCode.isEmpty() || courseCode.isBlank()) {
-                    throw new InvalidCourseFormatException("Student ID cannot be empty");
+                    throw new InvalidCourseFormatException("Course Code cannot be empty");
                 }
                 if (courseCode.equals("0")) {
                     System.out.println("Cancelling...");
@@ -213,6 +213,7 @@ public class CourseUI {
                     System.out.println("---------------------------------------------------------");
                     System.out.println(course.toStringFormat());
                     System.out.println("---------------------------------------------------------");
+                    return;
                 } else {
                     System.out.println("Course not found.");
                 }
