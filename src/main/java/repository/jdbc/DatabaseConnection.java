@@ -9,7 +9,7 @@ public class DatabaseConnection {
     //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
     private static final String DBMS = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String USERNAME = "root";
+    private static final String USERNAME = "roota";
     private static final String PASSWORD = "030130";
 
     private static final String DATABASENAME = "SystemStudentRepo";
@@ -22,7 +22,7 @@ public class DatabaseConnection {
         try {
             Class.forName(DBMS);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to load MySQL JDBC driver");
+            throw new RuntimeException("Failed to load JDBC driver");
         }
     }
 
@@ -43,7 +43,7 @@ public class DatabaseConnection {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return false;
     }
@@ -68,8 +68,8 @@ public class DatabaseConnection {
                 stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS SystemStudentRepo");
                 System.out.println("Database 'SystemStudentRepo' created successfully.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ignored) {
+            throw new RuntimeException();
         }
     }
 }

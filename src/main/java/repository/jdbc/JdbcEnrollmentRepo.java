@@ -33,7 +33,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -55,7 +55,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
 
             return new Enrollment(enrollId);
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -83,7 +83,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
             // Return the updated Enrollment object
             return e;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+
             return null;
         }
     }
@@ -99,7 +99,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
 
             return e;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+
             return null;
         }
     }
@@ -128,7 +128,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
 
             return enrollment;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+
             return null;
         }
     }
@@ -157,7 +157,6 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
 
             return enrollRepo.values().stream();
         } catch (SQLException e) {
-            e.getMessage();
             return Stream.empty();
         }
     }

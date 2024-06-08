@@ -29,7 +29,7 @@ public class JdbcCourseRepo implements CourseMangement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
@@ -49,7 +49,7 @@ public class JdbcCourseRepo implements CourseMangement {
 
             return new Course(courseId, courseName, credits);
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -71,7 +71,7 @@ public class JdbcCourseRepo implements CourseMangement {
 
             return course;
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -90,7 +90,7 @@ public class JdbcCourseRepo implements CourseMangement {
 
             return course;
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -111,7 +111,7 @@ public class JdbcCourseRepo implements CourseMangement {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }

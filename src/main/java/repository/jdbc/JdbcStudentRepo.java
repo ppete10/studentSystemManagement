@@ -30,7 +30,7 @@ public class JdbcStudentRepo implements StudentManagement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -68,7 +68,7 @@ public class JdbcStudentRepo implements StudentManagement {
 
             return new Student(studentId, name, age, year);
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -90,7 +90,7 @@ public class JdbcStudentRepo implements StudentManagement {
 
             return s;
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -108,7 +108,7 @@ public class JdbcStudentRepo implements StudentManagement {
 
             return student;
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -130,7 +130,7 @@ public class JdbcStudentRepo implements StudentManagement {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
