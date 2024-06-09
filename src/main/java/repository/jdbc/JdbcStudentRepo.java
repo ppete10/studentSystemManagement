@@ -68,7 +68,7 @@ public class JdbcStudentRepo implements StudentManagement {
 
             return new Student(studentId, name, age, year);
         } catch (SQLException e) {
-
+            e.printStackTrace();
             return null;
         }
     }
