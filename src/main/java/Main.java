@@ -1,6 +1,3 @@
-package studentSystemManagement;
-
-
 import static ui.MainUI.start;
 
 public class Main {
