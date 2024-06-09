@@ -5,10 +5,9 @@ import repository.jdbc.DBMS;
 import repository.jdbc.DatabaseConnection;
 
 import java.io.Console;
-import java.sql.SQLException;
 import java.util.Scanner;
 
-public class jdbcUI {
+public class JdbcUI {
     static Scanner scanner = new Scanner(System.in);
     static DatabaseConnection dbconnect;
     static String pass;

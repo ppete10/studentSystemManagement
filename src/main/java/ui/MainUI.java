@@ -42,9 +42,10 @@ public class MainUI {
 
     //Select storageType
     private static void storage() {
-        System.out.println("=======================================================");
-        System.out.println("Please select storage type[File, jdbc, Memory]");
-
+        String storageMenu = """
+                =======================================================
+                "Please select storage type[File, jdbc, Memory]""";
+        System.out.println(storageMenu);
         while (true) {
             System.out.print("Storage type: ");
             String typeStorage = scanner.nextLine();
@@ -55,17 +56,19 @@ public class MainUI {
                         System.out.println("Using File storage type.");
                         break;
                     } catch (Exception e) {
-                        System.out.println("File storage type cannot be used.");
+                        System.out.println("\nFile storage type cannot be used.");
+                        System.out.println(storageMenu);
                         continue;
                     }
                 case "jdbc":
                     try {
-                        jdbcUI.connectDB();
+                        JdbcUI.connectDB();
                         systemServices = new SystemService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
                         System.out.println("Using Database storage type.");
                         break;
                     } catch (Exception e) {
-                        System.out.println("Database storage type cannot be used.");
+                        System.out.println("\nDatabase storage type cannot be used.");
+                        System.out.println(storageMenu);
                         continue;
                     }
                 case "memory":
