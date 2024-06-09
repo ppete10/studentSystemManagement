@@ -2,7 +2,7 @@ package repository.jdbc;
 
 public enum DBMS {
     MYSQL("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/"),
-    CUSTOM("","");
+    CUSTOM("", "");
     private String driverClass;
     private String url;
 
@@ -10,6 +10,7 @@ public enum DBMS {
         this.driverClass = driverClass;
         this.url = urlPrefix;
     }
+
     public String getDriverClass() {
         return driverClass;
     }

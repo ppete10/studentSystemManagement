@@ -9,10 +9,11 @@ import java.util.stream.Stream;
 
 public class MemCourseRepo implements CourseMangement {
     private final Map<String, Course> courseRepo = new HashMap<>();
+
     @Override
     public Course addCourse(String courseId, String courseName, int credits) {
         Course c = new Course(courseId, courseName, credits);
-            courseRepo.put(c.getCourseCode(), c);
+        courseRepo.put(c.getCourseCode(), c);
         return c;
     }
 

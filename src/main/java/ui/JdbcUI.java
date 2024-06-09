@@ -18,7 +18,7 @@ public class JdbcUI {
         menujdbc();
     }
 
-    private static void login(){
+    private static void login() {
         System.out.println("======= Connect to Database Server =======");
         System.out.println("Please login *");
         Console cons = System.console();

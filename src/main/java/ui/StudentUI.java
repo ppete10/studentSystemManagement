@@ -1,6 +1,5 @@
 package ui;
 
-import entities.Course;
 import entities.Student;
 import exception.InvalidStudentFormatException;
 
@@ -229,7 +228,6 @@ public class StudentUI {
             Student student = systemServices.deleteStudent(studentId);
             if (student != null) {
                 System.out.println("Student deleted successfully.");
-
             }
         } else {
             System.out.println("Failed to delete student.");

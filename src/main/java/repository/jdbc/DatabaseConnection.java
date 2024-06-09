@@ -1,6 +1,7 @@
 package repository.jdbc;
 
 import java.sql.*;
+
 public class DatabaseConnection {
 
     //Access: sun.jdbc.odbc.JdbcOdbcDriver
@@ -24,10 +25,11 @@ public class DatabaseConnection {
         try {
             Class.forName(selectedDBMS.getDriverClass());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to load JDBC driver",e);
+            throw new RuntimeException("Failed to load JDBC driver", e);
         }
     }
-    private static String getJdbcUrl(){
+
+    private static String getJdbcUrl() {
         return selectedDBMS.getUrl() + DATABASENAME;
     }
 
@@ -70,7 +72,7 @@ public class DatabaseConnection {
             resultSet.close();
 
             if (!databaseExists) {
-                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ DATABASENAME);
+                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DATABASENAME);
                 System.out.println("Database 'studentsystemrepo' created successfully.");
             }
         } catch (SQLException e) {
