@@ -16,7 +16,7 @@ public class StudentUI {
         int age = 0;
         int year = 0;
         boolean isValid = false;
-        System.out.println("======= Register Student =======");
+        System.out.println("========== Register Student ==========");
         while (!isValid) {
             try {
                 System.out.print("Enter Name: ");
@@ -74,11 +74,11 @@ public class StudentUI {
 
         Student student = systemServices.registerStudent(name, age, year);
         if (student != null) {
-            System.out.println("   Student registered successfully");
+            System.out.println("    Student registered successfully");
             System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-            System.out.println("-------------------------------------");
+            System.out.println("----------------------------------------");
             System.out.println(student);
-            System.out.println("-------------------------------------");
+            System.out.println("----------------------------------------");
         } else {
             System.out.println("Failed to register student.");
         }
@@ -114,11 +114,11 @@ public class StudentUI {
         int year = 0;
         boolean isValid = false;
         Student studentOld = systemServices.findStudentById(studentId);
-        System.out.println("          Old Student Info");
+        System.out.println("           Old Student Info");
         System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
         System.out.println(studentOld);
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
         while (!isValid) {
             try {
                 System.out.print("Enter new Name: ");
@@ -175,11 +175,11 @@ public class StudentUI {
         }
 
         Student student = systemServices.reStudent(studentId, name, age, year);
-        System.out.println("         Update Successfully");
+        System.out.println("          Update Successfully");
         System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
         System.out.println(student);
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
     }
 
     static Student checkStudentId() {
@@ -244,9 +244,9 @@ public class StudentUI {
             if (student != null) {
                 System.out.println("            Found students");
                 System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-                System.out.println("-------------------------------------");
+                System.out.println("----------------------------------------");
                 System.out.println(student);
-                System.out.println("-------------------------------------");
+                System.out.println("----------------------------------------");
             }
         } else {
             System.out.println("Student not found.");
@@ -259,9 +259,9 @@ public class StudentUI {
             studentStream = systemServices.getAllStudent();
             System.out.println("              All students");
             System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-            System.out.println("-------------------------------------");
+            System.out.println("----------------------------------------");
             studentStream.forEach(System.out::println);
-            System.out.println("-------------------------------------");
+            System.out.println("----------------------------------------");
         } else {
             System.out.println("No students available.");
         }
@@ -271,8 +271,8 @@ public class StudentUI {
         Student student = systemServices.findStudentById(studentId);
         System.out.println("              Your Info");
         System.out.printf("%-6s %-20s %-5s %-5s%n", "ID", "Name", "Age", "Year");
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
         System.out.println(student);
-        System.out.println("-------------------------------------");
+        System.out.println("----------------------------------------");
     }
 }

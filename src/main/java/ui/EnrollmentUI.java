@@ -51,13 +51,11 @@ public class EnrollmentUI {
         systemServices.getAllCourses().forEach(availableCourses::add);
 
         List<Course> selectedCourses = new ArrayList<>();
-        if (availableCourses.isEmpty()) {
-            System.out.println("No Courses to Enroll");
-            return;
-        }
 
         while (true) {
-
+            if (availableCourses.isEmpty()) {
+                break;
+            }
             System.out.println("                   Available Courses:");
             System.out.printf("%-6s %-7s %-30s %-3s%n", "Number", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
@@ -143,6 +141,9 @@ public class EnrollmentUI {
         }
 
         while (true) {
+            if (availableCourses.isEmpty()) {
+                break;
+            }
             System.out.println("\n                   List All Courses");
             System.out.printf("%-6s %-7s %-30s %-3s%n", "Number", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
@@ -153,7 +154,7 @@ public class EnrollmentUI {
                 System.out.println("                 No Course Available.");
             }
             System.out.println("---------------------------------------------------------");
-            System.out.println("This menu will replace all courses. If no courses are selected, nothing will be changes.");
+            System.out.println("This menu will replace all courses. If no courses are selected, it will be empty.");
             System.out.print("Type number (Choose one Number at a time) (0 to exit):");
 
             if (availableCourses.isEmpty()) {

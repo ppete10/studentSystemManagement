@@ -43,7 +43,7 @@ public class MainUI {
     private static void storage() {
         String storageMenu = """
                 =======================================================
-                "Please select storage type[File, Database, Memory]""";
+                Please select storage type[ File | Database | Memory ]""";
         System.out.println(storageMenu);
         while (true) {
             System.out.print("Storage type: ");
@@ -85,10 +85,11 @@ public class MainUI {
 
     private static void selectRole() {
         String menu = """
-                ====================== Login ======================
-                1. Login for Student.
-                2. Login for Teacher.
-                3. Select Storage Type.""";
+                ======================== Login ========================
+                1. Login for Student
+                2. Login for Teacher
+                3. Select Storage Type
+                -------------------------------------------------------""";
         label:
         while (true) {
             System.out.println(menu);
@@ -141,15 +142,15 @@ public class MainUI {
 
         while (true) {
             String menu = """
-                    \n===== Menu For Student =====
+                    \n========= Menu For Student =========
                     1. Show your Info
                     2. Update Info
                     3. View All Courses
                     4. Enroll in Courses
                     5. View your Enrollments
-                    ------------------------------
+                    --------------------------------------
                     6. Logout
-                    """;
+                    --------------------------------------""";
             System.out.println(menu);
             System.out.print("Select Menu[1-6]: ");
             int option;
@@ -191,30 +192,30 @@ public class MainUI {
     private static void teacherActions() {
         while (true) {
             String menu = """
-                    \n======= Menu For Teacher =======
+                    \n========= Menu For Teacher =========
                     Student Manage:
                     1. Register Student
                     2. Update Student
                     3. Delete Student
                     4. Find Student by ID
                     5. View All Students
-                    ------------------------------
+                    --------------------------------------
                     Course Manage:
                     6. Add Course
                     7. Update Course
                     8. Delete Course
                     9. Find Course by Code
                     10.View All Courses
-                    ------------------------------
+                    --------------------------------------
                     Enroll Manage:
                     11. Enroll Student in Course
                     12. Update Enrollment
                     13. Delete Enrollment
                     14. Find Enrollment by ID
                     15. View All Enrollments
-                    ------------------------------
+                    --------------------------------------
                     16. Logout
-                    """;
+                    --------------------------------------""";
             System.out.println(menu);
             System.out.print("Select Menu[1-16]: ");
             int option;
