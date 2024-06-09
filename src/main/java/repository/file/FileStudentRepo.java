@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class FileStudentRepo implements StudentManagement {
-    static final String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
+    static final String PATH = ".\\repoFile\\";
     private final String filename = PATH + "student.dat";
     private long nextId = 0;
     private final Map<String, Student> repo;
