@@ -6,14 +6,13 @@ import repository.StudentManagement;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 
 public class FileStudentRepo implements StudentManagement {
-    static final String PATH = "";
+    static final String PATH = "C:\\Users\\User\\Documents\\INT103\\studentSystemManagement\\repoFile\\";
     private final String filename = PATH + "student.dat";
     private long nextId = 0;
-    private Map<String, Student> repo;
+    private final Map<String, Student> repo;
 
     public FileStudentRepo() {
         File file = new File(filename);
@@ -25,7 +24,7 @@ public class FileStudentRepo implements StudentManagement {
                 nextId = oi.readLong();
                 repo = (HashMap<String, Student>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new RuntimeException("File not found");
             }
         } else {
             repo = new HashMap<>();
@@ -40,7 +39,7 @@ public class FileStudentRepo implements StudentManagement {
             oos.writeLong(nextId);
             oos.writeObject(repo);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Can not write to file");
         }
     }
 

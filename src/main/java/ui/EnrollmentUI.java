@@ -97,7 +97,7 @@ public class EnrollmentUI {
         if (!selectedCourses.isEmpty()) {
             Set<Course> setCourse = new HashSet<>(selectedCourses);
             Enrollment enrollment = systemServices.enrollStudentInCourse(studentId, setCourse);
-            System.out.println("                   Enroll In Courses Success.");
+            System.out.println("               Enroll In Courses Success");
             System.out.printf("%-6s %-7s %-30s %-3s%n", "ID", "Code", "Name", "Credits");
             System.out.println("---------------------------------------------------------");
             System.out.println(enrollment);
@@ -156,6 +156,10 @@ public class EnrollmentUI {
             System.out.println("This menu will replace all courses. If no courses are selected, nothing will be changes.");
             System.out.print("Type number (Choose one Number at a time) (0 to exit):");
 
+            if (availableCourses.isEmpty()) {
+                break;
+            }
+
             try {
                 String input = scanner.nextLine();
                 int option = Integer.parseInt(input);
@@ -174,22 +178,21 @@ public class EnrollmentUI {
                     System.out.println("Invalid Number. Please try again.");
                 }
 
-
-                if (!selectedCourses.isEmpty()) {
-                    Set<Course> setCourse = new HashSet<>(selectedCourses);
-                    Enrollment enrollment = systemServices.changeEnrollment(enrollId, setCourse);
-                    System.out.println("                 Update Enroll Success.");
-                    System.out.printf("%-6s %-7s %-30s %-3s%n", "Number", "Code", "Name", "Credits");
-                    System.out.println("---------------------------------------------------------");
-                    System.out.println(enrollment);
-                    System.out.println("---------------------------------------------------------");
-                } else {
-                    systemServices.changeEnrollment(enrollId, new HashSet<>());
-                    System.out.println("No courses Enrolled.");
-                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid Number. Please try again.");
             }
+        }
+        if (!selectedCourses.isEmpty()) {
+            Set<Course> setCourse = new HashSet<>(selectedCourses);
+            Enrollment enrollment = systemServices.changeEnrollment(enrollId, setCourse);
+            System.out.println("                 Update Enroll Success.");
+            System.out.printf("%-6s %-7s %-30s %-3s%n", "Number", "Code", "Name", "Credits");
+            System.out.println("---------------------------------------------------------");
+            System.out.println(enrollment);
+            System.out.println("---------------------------------------------------------");
+        } else {
+            systemServices.changeEnrollment(enrollId, new HashSet<>());
+            System.out.println("No courses Enrolled.");
         }
     }
 

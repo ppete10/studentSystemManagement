@@ -30,7 +30,7 @@ public class JdbcStudentRepo implements StudentManagement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-
+            throw new RuntimeException("Cannot create Student table.");
         }
     }
 

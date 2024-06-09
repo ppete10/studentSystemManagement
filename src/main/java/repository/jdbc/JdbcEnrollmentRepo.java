@@ -33,7 +33,7 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-
+            throw new RuntimeException("Cannot create Enrollment table.");
         }
     }
 
@@ -51,9 +51,11 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
                 courseStmt.setInt(4, course.getCredits());
                 courseStmt.executeUpdate();
             }
-
-
-            return new Enrollment(enrollId);
+            Enrollment e = new Enrollment(enrollId);
+            for (Course c : courses) {
+                e.addCourse(c);
+            }
+            return e;
         } catch (SQLException e) {
 
             return null;
@@ -67,11 +69,10 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
              PreparedStatement insertCourseStmt = conn.prepareStatement("INSERT INTO Enrollment (enrollment_id, course_code, course_name, credits) VALUES (?, ?, ?, ?)")) {
 
 
-            // Delete existing enrollment courses
             deleteCourseStmt.setString(1, e.getStudentEnrollId());
             deleteCourseStmt.executeUpdate();
 
-            // Insert new enrollment courses
+
             for (Course course : courses) {
                 insertCourseStmt.setString(1, e.getStudentEnrollId());
                 insertCourseStmt.setString(2, course.getCourseCode());
@@ -79,8 +80,9 @@ public class JdbcEnrollmentRepo implements EnrollManagement {
                 insertCourseStmt.setInt(4, course.getCredits());
                 insertCourseStmt.executeUpdate();
             }
+            e.updateCourse(courses);
 
-            // Return the updated Enrollment object
+
             return e;
         } catch (SQLException ex) {
 

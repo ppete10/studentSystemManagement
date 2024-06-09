@@ -13,8 +13,11 @@ import java.util.stream.Stream;
 public class MemEnrollmentRepo implements EnrollManagement {
     private final Map<String, Enrollment> enrollRepo = new HashMap<>();
     @Override
-    public Enrollment addEnrollment(String enrollId, Set<Course> c) {
+    public Enrollment addEnrollment(String enrollId, Set<Course> course) {
         Enrollment e = new Enrollment(enrollId);
+        for (Course c : course) {
+            e.addCourse(c);
+        }
         enrollRepo.put(e.getStudentEnrollId(), e);
         return e;
     }

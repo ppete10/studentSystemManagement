@@ -1,5 +1,6 @@
 package ui;
 
+import entities.Course;
 import entities.Student;
 import exception.InvalidStudentFormatException;
 
@@ -86,6 +87,16 @@ public class StudentUI {
 
     static void updateStudent() {
         viewAllStudents();
+        try {
+            Stream<Student> any = systemServices.getAllStudent();
+            if (any.findAny().isEmpty()) {
+                System.out.println("Delete Student has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Delete Student has Cancelled.");
+            return;
+        }
         System.out.println("====== Update Student ======");
         Student student = checkStudentId();
         if (student != null) {
@@ -200,6 +211,17 @@ public class StudentUI {
 
     static void deleteStudent() {
         viewAllStudents();
+        try {
+            Stream<Student> any = systemServices.getAllStudent();
+            if (any.findAny().isEmpty()) {
+                System.out.println("Delete Student has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Delete Student has Cancelled.");
+            return;
+        }
+
         System.out.println("====== Delete Student ======");
         Student studentCheck = checkStudentId();
         if (studentCheck != null) {
@@ -207,6 +229,7 @@ public class StudentUI {
             Student student = systemServices.deleteStudent(studentId);
             if (student != null) {
                 System.out.println("Student deleted successfully.");
+
             }
         } else {
             System.out.println("Failed to delete student.");

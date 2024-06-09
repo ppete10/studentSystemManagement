@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import static repository.file.FileStudentRepo.PATH;
@@ -16,7 +15,7 @@ import static repository.file.FileStudentRepo.PATH;
 public class FileEnrollmentRepo implements EnrollManagement {
     private final String filename = PATH + "enrollment.dat";
     private static long nextCode = 0;
-    private Map<String, Enrollment> enrollRepo;
+    private final Map<String, Enrollment> enrollRepo;
 
     public FileEnrollmentRepo() {
         File file = new File(filename);
@@ -28,7 +27,7 @@ public class FileEnrollmentRepo implements EnrollManagement {
                 nextCode = oi.readLong();
                 enrollRepo = (HashMap<String, Enrollment>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new RuntimeException("File not found");
             }
         } else {
             nextCode = 1;
@@ -44,7 +43,7 @@ public class FileEnrollmentRepo implements EnrollManagement {
             oos.writeLong(nextCode);
             oos.writeObject(enrollRepo);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Cannot write to file");
         }
     }
 

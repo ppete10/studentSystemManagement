@@ -48,7 +48,7 @@ public class DatabaseConnection {
             }
             resultSet.close();
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException("Cannot connect to the database.");
         }
         return false;
     }
@@ -73,8 +73,8 @@ public class DatabaseConnection {
                 stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ DATABASENAME);
                 System.out.println("Database 'studentsystemrepo' created successfully.");
             }
-        } catch (SQLException ignored) {
-            throw new RuntimeException();
+        } catch (SQLException e) {
+            throw new RuntimeException("Cannot create the Database");
         }
     }
 }

@@ -26,7 +26,6 @@ public class MainUI {
 
     public static void start() {
         System.out.println("         Welcome to Student System Management");
-        System.out.println("=======================================================");
         run();
         System.out.println("=======================================================");
         System.out.println("Thank you!! for using Student System Management");
@@ -67,7 +66,8 @@ public class MainUI {
                         System.out.println("Using Database storage type.");
                         break;
                     } catch (Exception e) {
-                        System.out.println("\nDatabase storage type cannot be used.");
+                        System.out.println("\n" + e.getMessage());
+                        System.out.println("Database storage type cannot be used.");
                         System.out.println(storageMenu);
                         continue;
                     }
@@ -76,7 +76,7 @@ public class MainUI {
                     System.out.println("Using Memory storage type.");
                     break;
                 default:
-                    System.out.println("Invalid option, Please select [File, jdbc, Memory]!");
+                    System.out.println("Invalid option, Please select [File, Database, Memory]!");
                     continue;
             }
             break;

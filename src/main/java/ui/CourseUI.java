@@ -94,6 +94,16 @@ public class CourseUI {
         boolean isValid = false;
 
         viewAllCourses();
+        try {
+            Stream<Course> any = systemServices.getAllCourses();
+            if (any.findAny().isEmpty()) {
+                System.out.println("Delete Course has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Delete Course has Cancelled.");
+            return;
+        }
         System.out.println("====== Update Course ======");
         while (!isValid) {
             try {
@@ -169,25 +179,39 @@ public class CourseUI {
 
     static void deleteCourse() {
         String courseCode = null;
-
         viewAllCourses();
-        System.out.println("====== Delete Course ======");
         try {
-            System.out.print("Enter course code: ");
-            courseCode = scanner.nextLine().toUpperCase();
-            if (courseCode.trim().isEmpty()) {
-                throw new InvalidCourseFormatException("Course code cannot be empty");
+            Stream<Course> any = systemServices.getAllCourses();
+            if (any.findAny().isEmpty()) {
+                System.out.println("Delete Course has Cancelled.");
+                return;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Delete Course has Cancelled.");
+            return;
+        }
+        while (true) {
+            System.out.println("====== Delete Course ======");
+            try {
+                System.out.print("Enter Course Code or Exit[0]: ");
+                courseCode = scanner.nextLine().toUpperCase();
+                if (courseCode.trim().isEmpty()) {
+                    throw new InvalidCourseFormatException("Course code cannot be empty");
+                }
+                if (courseCode.equals("0")) {
+                    System.out.println("Cancelling...");
+                    return;
+                }
+            } catch (InvalidCourseFormatException e) {
+                System.out.println("Invalid course code. Try again!.");
             }
 
-        } catch (InvalidCourseFormatException e) {
-            System.out.println("Invalid course code. Try again!.");
-        }
-
-        Course course = systemServices.deleteCourse(courseCode);
-        if (course != null) {
-            System.out.println(course.getCourseCode() + " has deleted successfully.");
-        } else {
-            System.out.println("Failed to delete course.");
+            Course course = systemServices.deleteCourse(courseCode);
+            if (course != null) {
+                System.out.println(course.getCourseCode() + " has deleted successfully.");
+            } else {
+                System.out.println("Failed to delete course.");
+            }
         }
     }
 

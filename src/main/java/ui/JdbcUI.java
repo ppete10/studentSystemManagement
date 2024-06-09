@@ -5,17 +5,21 @@ import repository.jdbc.DBMS;
 import repository.jdbc.DatabaseConnection;
 
 import java.io.Console;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class JdbcUI {
     static Scanner scanner = new Scanner(System.in);
-    static DatabaseConnection dbconnect;
+    static DatabaseConnection DBConnect;
     static String pass;
     static String username;
 
     public static void connectDB() {
-        System.out.println("Connect to Database Server");
+        login();
+        menujdbc();
+    }
+
+    private static void login(){
+        System.out.println("======= Connect to Database Server =======");
         System.out.println("Please login *");
         Console cons = System.console();
         if (cons != null) {
@@ -30,16 +34,13 @@ public class JdbcUI {
             System.out.print("Password: ");
             pass = scanner.nextLine();
         }
-
-        dbconnect = new DatabaseConnection(username, pass);
-        menujdbc();
-
+        DBConnect = new DatabaseConnection(username, pass);
     }
 
     private static void menujdbc() {
         boolean exit = false;
         String menu = """
-                ===== Database Configuration =====
+                =========== Database Configuration ===========
                 1. Change USER PASSWORD.
                 2. Select DBMS.
                 3. Connect to Database.
@@ -57,7 +58,7 @@ public class JdbcUI {
             }
             switch (option) {
                 case 1:
-                    connectDB();
+                    login();
                     break;
                 case 2:
                     changeDBMS();
@@ -77,7 +78,7 @@ public class JdbcUI {
     private static void connectToDB() {
         try {
             DatabaseConnection.getConnection();
-            System.out.println("Database 'SystemStudentRepo' Connected");
+            System.out.println("Database 'systemstudentrepo' Connected");
         } catch (Exception e) {
             System.out.println("Failed to connect");
             System.out.println("Please check your Driver, URL DBMS and USER, PASSWORD. Try again!.");
@@ -92,35 +93,48 @@ public class JdbcUI {
                 for (int i = 0; i < dbmsValues.length; i++) {
                     System.out.println((i + 1) + ". " + dbmsValues[i].name());
                 }
-
+                System.out.print("Select an option: ");
                 String input = scanner.nextLine();
                 int dbmsChoice = Integer.parseInt(input);
 
                 if (dbmsChoice == 2) {
-                    System.out.println("## DBMS  Driver ###");
-                    System.out.println("Ex. [ com.mysql.cj.jdbc.Driver ]");
+                    System.out.println("""
+                            ############# DBMS  Driver #############
+                            ---------------- Example ---------------
+                            MySQL: com.mysql.cj.jdbc.Driver
+                            Oracle: oracle.jdbc.driver.OracleDriver
+                            Access: sun.jdbc.odbc.JdbcOdbcDriver
+                            ----------------------------------------""");
                     System.out.print("Enter driver: ");
                     String customDriver = scanner.nextLine();
 
-                    System.out.println("## DBMS URL ###");
-                    System.out.println("Ex. [ jdbc:mysql://localhost:3306/ ]");
+                    System.out.println("""
+                            ############### DBMS URL ###############
+                            ---------------- Example ---------------
+                            MySQL: jdbc:mysql://localhost:3306/
+                            Oracle: jdbc:oracle:thin//hostname:port:
+                            Access: jdbc:odbc:dataSource
+                            ----------------------------------------""");
                     System.out.print("Enter URL: ");
                     String customUrl = scanner.nextLine();
 
                     DBMS customDBMS = DBMS.CUSTOM;
                     customDBMS.setDriverClass(customDriver);
                     customDBMS.setUrl(customUrl);
-                    dbconnect.setDBMS(customDBMS);
+                    DBConnect.setDBMS(customDBMS);
+                    System.out.println("Custom DBMS set successfully.");
                     break;
                 } else {
                     DBMS selectedDBMS = DBMS.values()[dbmsChoice - 1];
-                    dbconnect.setDBMS(selectedDBMS);
+                    DBConnect.setDBMS(selectedDBMS);
+                    System.out.println("DBMS set successfully.");
                     break;
                 }
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                System.out.println("Invalid chioce. Try again.");
+                System.out.println("Invalid choice. Try again.");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                break;
             }
         }
     }

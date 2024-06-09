@@ -29,7 +29,7 @@ public class JdbcCourseRepo implements CourseMangement {
                 stmt.executeUpdate(createTableSQL);
             }
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException("Cannot create Course table.");
         }
     }
 

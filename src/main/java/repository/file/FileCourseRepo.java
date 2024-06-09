@@ -6,14 +6,13 @@ import repository.CourseMangement;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import static repository.file.FileStudentRepo.PATH;
 
 public class FileCourseRepo implements CourseMangement {
-    private String filename = PATH + "course.dat";
-    private Map<String, Course> courseRepo;
+    private final String filename = PATH + "course.dat";
+    private final Map<String, Course> courseRepo;
 
     public FileCourseRepo() {
         File file = new File(filename);
@@ -24,7 +23,7 @@ public class FileCourseRepo implements CourseMangement {
 
                 courseRepo = (HashMap<String, Course>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
-
+                throw new RuntimeException("File not found");
             }
         } else {
             courseRepo = new HashMap<>();
@@ -39,7 +38,7 @@ public class FileCourseRepo implements CourseMangement {
             oos.writeObject(courseRepo);
             oos.flush();
         } catch (IOException e) {
-
+            throw new RuntimeException("Cannot write to file");
         }
     }
 
