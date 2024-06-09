@@ -68,7 +68,6 @@ public class JdbcStudentRepo implements StudentManagement {
 
             return new Student(studentId, name, age, year);
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -139,6 +138,7 @@ public class JdbcStudentRepo implements StudentManagement {
     public Stream<Student> getAllStudent() {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
+
              ResultSet rs = stmt.executeQuery("SELECT * FROM Students")) {
 
             List<Student> students = new ArrayList<>();

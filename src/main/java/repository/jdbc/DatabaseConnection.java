@@ -4,13 +4,7 @@ import java.sql.*;
 
 public class DatabaseConnection {
 
-    //Access: sun.jdbc.odbc.JdbcOdbcDriver
-    //MySQL: com.mysql.cj.jdbc.Driver
-    //Oracle: oracle.jdbc.driver.OracleDriver
     private static DBMS selectedDBMS = DBMS.MYSQL; //Default
-    //Access jdbc:odbc:dataSource
-    //MySQL jdbc:mysql://hostname:port/dbname
-    //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
     private static String USERNAME;
     private static String PASSWORD;
     private static final String DATABASENAME = "studentsystemrepo";
