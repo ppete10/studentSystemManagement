@@ -5,6 +5,7 @@ import repository.jdbc.DBMS;
 import repository.jdbc.DatabaseConnection;
 
 import java.io.Console;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class JdbcUI {
@@ -84,35 +85,44 @@ public class JdbcUI {
     }
 
     private static void changeDBMS() {
-        System.out.println("=== Select DBMS ===");
-        DBMS[] dbmsValues = DBMS.values();
-        for (int i = 0; i < dbmsValues.length; i++) {
-            System.out.println((i + 1) + ". " + dbmsValues[i].name());
+        while (true) {
+            try {
+                System.out.println("=== Select DBMS ===");
+                DBMS[] dbmsValues = DBMS.values();
+                for (int i = 0; i < dbmsValues.length; i++) {
+                    System.out.println((i + 1) + ". " + dbmsValues[i].name());
+                }
+
+                String input = scanner.nextLine();
+                int dbmsChoice = Integer.parseInt(input);
+
+                if (dbmsChoice == 2) {
+                    System.out.println("## DBMS  Driver ###");
+                    System.out.println("Ex. [ com.mysql.cj.jdbc.Driver ]");
+                    System.out.print("Enter driver: ");
+                    String customDriver = scanner.nextLine();
+
+                    System.out.println("## DBMS URL ###");
+                    System.out.println("Ex. [ jdbc:mysql://localhost:3306/ ]");
+                    System.out.print("Enter URL: ");
+                    String customUrl = scanner.nextLine();
+
+                    DBMS customDBMS = DBMS.CUSTOM;
+                    customDBMS.setDriverClass(customDriver);
+                    customDBMS.setUrl(customUrl);
+                    dbconnect.setDBMS(customDBMS);
+                    break;
+                } else {
+                    DBMS selectedDBMS = DBMS.values()[dbmsChoice - 1];
+                    dbconnect.setDBMS(selectedDBMS);
+                    break;
+                }
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.out.println("Invalid chioce. Try again.");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
-
-        String input = scanner.nextLine();
-        int dbmsChoice = Integer.parseInt(input);
-
-        if (dbmsChoice == 2) {
-            System.out.println("## DBMS  Driver ###");
-            System.out.println("Ex. [ com.mysql.cj.jdbc.Driver ]");
-            System.out.print("Enter driver: ");
-            String customDriver = scanner.nextLine();
-
-            System.out.println("## DBMS URL ###");
-            System.out.println("Ex. [ jdbc:mysql://localhost:3306/ ]");
-            System.out.print("Enter URL: ");
-            String customUrl = scanner.nextLine();
-
-            DBMS customDBMS = DBMS.CUSTOM;
-            customDBMS.setDriverClass(customDriver);
-            customDBMS.setUrl(customUrl);
-            dbconnect.setDBMS(customDBMS);
-        } else {
-            DBMS selectedDBMS = DBMS.values()[dbmsChoice - 1];
-            dbconnect.setDBMS(selectedDBMS);
-        }
-
     }
 
 }
