@@ -39,10 +39,10 @@ public class JdbcUI {
         boolean exit = false;
         String menu = """
                 ===== Database Configuration =====
-                1. Change Account
-                2. Select DBMS
-                3. Connect to Database
-                4. Exit""";
+                1. Change USER PASSWORD.
+                2. Select DBMS.
+                3. Connect to Database.
+                4. Exit.""";
         while (!exit) {
             System.out.println(menu);
             System.out.print("Select an option: ");
@@ -94,12 +94,12 @@ public class JdbcUI {
         int dbmsChoice = Integer.parseInt(input);
 
         if (dbmsChoice == 2) {
-            System.out.println("## Driver DBMS ###");
+            System.out.println("## DBMS  Driver ###");
             System.out.println("Ex. [ com.mysql.cj.jdbc.Driver ]");
             System.out.print("Enter driver: ");
             String customDriver = scanner.nextLine();
 
-            System.out.println("## URL DBMS ###");
+            System.out.println("## DBMS URL ###");
             System.out.println("Ex. [ jdbc:mysql://localhost:3306/ ]");
             System.out.print("Enter URL: ");
             String customUrl = scanner.nextLine();

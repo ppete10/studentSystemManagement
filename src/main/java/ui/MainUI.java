@@ -44,7 +44,7 @@ public class MainUI {
     private static void storage() {
         String storageMenu = """
                 =======================================================
-                "Please select storage type[File, jdbc, Memory]""";
+                "Please select storage type[File, Database, Memory]""";
         System.out.println(storageMenu);
         while (true) {
             System.out.print("Storage type: ");
@@ -60,7 +60,7 @@ public class MainUI {
                         System.out.println(storageMenu);
                         continue;
                     }
-                case "jdbc":
+                case "database":
                     try {
                         JdbcUI.connectDB();
                         systemServices = new SystemService(new JdbcStudentRepo(), new JdbcEnrollmentRepo(), new JdbcCourseRepo());
