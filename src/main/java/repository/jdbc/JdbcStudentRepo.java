@@ -25,7 +25,7 @@ public class JdbcStudentRepo implements StudentManagement {
                         + "student_Id VARCHAR(10) PRIMARY KEY,"
                         + "name VARCHAR(100) NOT NULL,"
                         + "age INT,"
-                        + "years INT"
+                        + "year INT"
                         + ")";
                 stmt.executeUpdate(createTableSQL);
             }
@@ -53,7 +53,7 @@ public class JdbcStudentRepo implements StudentManagement {
     @Override
     public Student addStudent(String name, int age, int year) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Students (student_Id, name, age, years) VALUES (?, ?, ?, ?)")) {
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Students (student_Id, name, age, year) VALUES (?, ?, ?, ?)")) {
 
             String studentId = generateStudentId(conn);
             stmt.setString(1, studentId);
@@ -76,7 +76,7 @@ public class JdbcStudentRepo implements StudentManagement {
     @Override
     public Student updateStudent(Student s) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, years=? WHERE student_Id=?")) {
+             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, year=? WHERE student_Id=?")) {
 
             stmt.setString(1, s.getName());
             stmt.setInt(2, s.getAge());
@@ -123,7 +123,7 @@ public class JdbcStudentRepo implements StudentManagement {
                 if (rs.next()) {
                     String name = rs.getString("name");
                     int age = rs.getInt("age");
-                    int year = rs.getInt("years");
+                    int year = rs.getInt("year");
                     return new Student(studentId, name, age, year);
                 } else {
                     return null;
@@ -146,7 +146,7 @@ public class JdbcStudentRepo implements StudentManagement {
                 String studentId = rs.getString("student_Id");
                 String name = rs.getString("name");
                 int age = rs.getInt("age");
-                int year = rs.getInt("years");
+                int year = rs.getInt("year");
                 students.add(new Student(studentId, name, age, year));
             }
             return students.stream();
