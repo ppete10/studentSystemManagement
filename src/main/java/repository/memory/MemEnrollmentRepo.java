@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class MemEnrollmentRepo implements EnrollManagement {
-    private Map<String, Enrollment> enrollRepo = new HashMap<>();
+    private final Map<String, Enrollment> enrollRepo = new HashMap<>();
     @Override
     public Enrollment addEnrollment(String enrollId, Set<Course> c) {
         Enrollment e = new Enrollment(enrollId);

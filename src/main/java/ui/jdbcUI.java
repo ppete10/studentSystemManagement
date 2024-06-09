@@ -76,7 +76,7 @@ public class jdbcUI {
 
     private static void connectToDB() {
         try {
-            dbconnect.getConnection();
+            DatabaseConnection.getConnection();
             System.out.println("Database 'SystemStudentRepo' Connected");
         } catch (Exception e) {
             System.out.println("Failed to connect");

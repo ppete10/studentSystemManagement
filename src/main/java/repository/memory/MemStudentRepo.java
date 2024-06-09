@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public class MemStudentRepo implements StudentManagement {
     private static long nextId = 0;
-    private Map<String, Student> repo = new HashMap<>();
+    private final Map<String, Student> repo = new HashMap<>();
 
     @Override
     public Student addStudent(String name, int age, int year) {

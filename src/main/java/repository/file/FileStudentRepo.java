@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class FileStudentRepo implements StudentManagement {
     static final String PATH = "";
-    private String filename = PATH + "student.dat";
+    private final String filename = PATH + "student.dat";
     private long nextId = 0;
     private Map<String, Student> repo;
 

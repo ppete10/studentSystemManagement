@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static repository.file.FileStudentRepo.PATH;
 
 public class FileEnrollmentRepo implements EnrollManagement {
-    private String filename = PATH + "enrollment.dat";
+    private final String filename = PATH + "enrollment.dat";
     private static long nextCode = 0;
     private Map<String, Enrollment> enrollRepo;
 

@@ -96,7 +96,7 @@ public class SystemService {
 
     public Course updateCourse(String courseCode, String courseName, int credits) {
         Course c = getCourseByCode(courseCode);
-        if (courseCode == null || c == null || courseCode == null || courseName == null || credits <= 0)
+        if (c == null || courseCode == null || courseName == null || credits <= 0)
             return null;
         Course c2 = new Course(courseCode, courseName, credits);
         return courseRepo.updateCourse(courseCode, c2);

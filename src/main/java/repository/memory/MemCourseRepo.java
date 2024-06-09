@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class MemCourseRepo implements CourseMangement {
-    private Map<String, Course> courseRepo = new HashMap<>();
+    private final Map<String, Course> courseRepo = new HashMap<>();
     @Override
     public Course addCourse(String courseId, String courseName, int credits) {
         Course c = new Course(courseId, courseName, credits);

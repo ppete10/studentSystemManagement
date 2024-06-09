@@ -22,7 +22,7 @@ public class FileCourseRepo implements CourseMangement {
                  BufferedInputStream bi = new BufferedInputStream(fi);
                  ObjectInputStream oi = new ObjectInputStream(bi)) {
 
-                courseRepo = (TreeMap<String, Course>) oi.readObject();
+                courseRepo = (HashMap<String, Course>) oi.readObject();
             } catch (IOException | ClassNotFoundException e) {
 
             }

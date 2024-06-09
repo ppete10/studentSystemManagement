@@ -15,8 +15,8 @@ public class DatabaseConnection {
     private static final String DATABASENAME = "SystemStudentRepo";
 
     public DatabaseConnection(String USERNAME, String PASSWORD) {
-        this.USERNAME = USERNAME;
-        this.PASSWORD = PASSWORD;
+        DatabaseConnection.USERNAME = USERNAME;
+        DatabaseConnection.PASSWORD = PASSWORD;
     }
 
     public void setDBMS(DBMS dbms) {
