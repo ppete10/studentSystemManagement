@@ -12,7 +12,7 @@ public class DatabaseConnection {
     //Oracle jdbc:oracle:thin//hostname:port:oracleDBSID
     private static String USERNAME;
     private static String PASSWORD;
-    private static final String DATABASENAME = "SystemStudentRepo";
+    private static final String DATABASENAME = "studentsystemrepo";
 
     public DatabaseConnection(String USERNAME, String PASSWORD) {
         DatabaseConnection.USERNAME = USERNAME;
@@ -62,7 +62,7 @@ public class DatabaseConnection {
             boolean databaseExists = false;
             while (resultSet.next()) {
                 String databaseName = resultSet.getString(1);
-                if (databaseName.equals("SystemStudentRepo")) {
+                if (databaseName.equals(DATABASENAME)) {
                     databaseExists = true;
                     break;
                 }
@@ -71,7 +71,7 @@ public class DatabaseConnection {
 
             if (!databaseExists) {
                 stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS "+ DATABASENAME);
-                System.out.println("Database 'SystemStudentRepo' created successfully.");
+                System.out.println("Database 'studentsystemrepo' created successfully.");
             }
         } catch (SQLException ignored) {
             throw new RuntimeException();
