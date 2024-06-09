@@ -75,7 +75,7 @@ public class JdbcStudentRepo implements StudentManagement {
     @Override
     public Student updateStudent(Student s) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, year=? WHERE student_Id=?")) {
+             PreparedStatement stmt = conn.prepareStatement("UPDATE Students SET name=?, age=?, years=? WHERE student_Id=?")) {
 
             stmt.setString(1, s.getName());
             stmt.setInt(2, s.getAge());
